@@ -1,0 +1,110 @@
+<section class="pokedex" [formGroup]="form">
+  <h1 class="pokedex__title">Pokédex</h1>
+
+  <form class="filters" (submit)="$event.preventDefault()">
+    <mat-form-field appearance="outline" class="filters__field filters__search">
+      <mat-label>Buscar por nome ou número</mat-label>
+      <mat-icon matPrefix aria-hidden="true" fontIcon="search"></mat-icon>
+      <input matInput type="search" formControlName="search" autocomplete="off" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filters__field">
+      <mat-label>Ordenar por</mat-label>
+      <mat-select formControlName="sort">
+        @for (option of sortOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filters__field">
+      <mat-label>Tipos</mat-label>
+      <mat-select formControlName="types" multiple>
+        @for (option of typeOptions(); track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+      <mat-hint>Combina vários (E)</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filters__field">
+      <mat-label>Raridade</mat-label>
+      <mat-select formControlName="categories" multiple>
+        @for (option of categoryOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filters__field">
+      <mat-label>Dificuldade de captura</mat-label>
+      <mat-select formControlName="tiers" multiple>
+        @for (option of tierOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <button
+      matButton="outlined"
+      type="button"
+      class="filters__clear"
+      (click)="clearFilters()"
+      [disabled]="!hasActiveFilters()"
+    >
+      <mat-icon aria-hidden="true" fontIcon="filter_alt_off"></mat-icon>
+      Limpar filtros
+    </button>
+  </form>
+
+  @if (status() === 'loading') {
+    <mat-progress-bar mode="indeterminate" aria-label="Carregando Pokédex"></mat-progress-bar>
+  }
+
+  @if (rarityStatus() === 'building') {
+    <div class="rarity-progress" role="status">
+      <span>Carregando dados de raridade… {{ rarityProgress().loaded }} de {{ rarityProgress().total }}</span>
+      <mat-progress-bar
+        mode="determinate"
+        [value]="rarityProgress().total ? (rarityProgress().loaded / rarityProgress().total) * 100 : 0"
+      ></mat-progress-bar>
+    </div>
+  }
+
+  @if (status() === 'error') {
+    <div class="state state--error" role="alert">
+      <mat-icon aria-hidden="true" fontIcon="error_outline"></mat-icon>
+      <p>Não foi possível carregar a Pokédex. Verifique sua conexão.</p>
+      <button matButton="filled" type="button" (click)="retry()">Tentar novamente</button>
+    </div>
+  } @else if (status() === 'ready') {
+    <p class="results-count" role="status" aria-live="polite">
+      {{ total() }} Pokémon encontrados
+    </p>
+
+    @if (total() === 0) {
+      <div class="state">
+        <mat-icon aria-hidden="true" fontIcon="search_off"></mat-icon>
+        <p>Nenhum Pokémon encontrado com esses filtros.</p>
+        <button matButton="outlined" type="button" (click)="clearFilters()">Limpar filtros</button>
+      </div>
+    } @else {
+      <ul class="grid">
+        @for (pokemon of pagedItems(); track pokemon.id) {
+          <li class="grid__item">
+            <app-pokemon-card [item]="pokemon" [rarity]="rarityMap().get(pokemon.id)" />
+          </li>
+        }
+      </ul>
+
+      <mat-paginator
+        [length]="total()"
+        [pageSize]="pageSize()"
+        [pageIndex]="pageIndex()"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPage($event)"
+        aria-label="Selecionar página de Pokémon"
+      ></mat-paginator>
+    }
+  }
+</section>

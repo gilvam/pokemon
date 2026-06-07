@@ -1,0 +1,163 @@
+<a matButton routerLink="/pokedex" class="detail__back">
+  <mat-icon aria-hidden="true" fontIcon="arrow_back"></mat-icon>
+  Voltar para a lista
+</a>
+
+@if (detail.isLoading()) {
+  <div class="detail__state" role="status">
+    <mat-spinner aria-label="Carregando detalhes do Pokémon"></mat-spinner>
+  </div>
+} @else if (detail.error()) {
+  <div class="detail__state" role="alert">
+    <mat-icon aria-hidden="true" fontIcon="error_outline"></mat-icon>
+    <p>Não encontramos esse Pokémon.</p>
+    <button matButton="filled" type="button" (click)="reload()">Tentar novamente</button>
+  </div>
+} @else if (vm(); as p) {
+  <article class="detail">
+    <header class="detail__header">
+      <div class="detail__art">
+        <img
+          [src]="p.artwork"
+          [alt]="p.name"
+          width="320"
+          height="320"
+          decoding="async"
+        />
+      </div>
+
+      <div class="detail__heading">
+        <p class="detail__number">{{ p.dexNumber }}</p>
+        <h1 class="detail__name">{{ p.name }}</h1>
+        @if (p.genus) {
+          <p class="detail__genus">{{ p.genus }}</p>
+        }
+        <div class="detail__types">
+          @for (type of p.types; track type) {
+            <app-type-chip [type]="type" />
+          }
+        </div>
+        <div class="detail__badges">
+          @if (p.isNotableRarity) {
+            <span class="badge badge--category">{{ p.rarityCategory }}</span>
+          }
+          <span class="badge">Captura: {{ p.captureTier }}</span>
+        </div>
+        @if (p.flavorText) {
+          <p class="detail__flavor">{{ p.flavorText }}</p>
+        }
+      </div>
+    </header>
+
+    <div class="detail__grid">
+      <mat-card appearance="outlined">
+        <mat-card-header><mat-card-title>Estatísticas base</mat-card-title></mat-card-header>
+        <mat-card-content class="stats">
+          @for (stat of p.stats; track stat.label) {
+            <app-stat-bar [label]="stat.label" [value]="stat.value" />
+          }
+          <mat-divider></mat-divider>
+          <app-stat-bar label="Total" [value]="p.statTotal" [max]="780" />
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined">
+        <mat-card-header><mat-card-title>Características</mat-card-title></mat-card-header>
+        <mat-card-content>
+          <dl class="facts">
+            <div><dt>Altura</dt><dd>{{ p.heightM | number: '1.1-2' }} m</dd></div>
+            <div><dt>Peso</dt><dd>{{ p.weightKg | number: '1.1-2' }} kg</dd></div>
+            @if (p.baseExperience !== null) {
+              <div><dt>Exp. base</dt><dd>{{ p.baseExperience }}</dd></div>
+            }
+            <div>
+              <dt>Habilidades</dt>
+              <dd>
+                @for (ability of p.abilities; track ability.name) {
+                  <span>{{ ability.name }}@if (ability.hidden) {<em> (oculta)</em>}</span>
+                }
+              </dd>
+            </div>
+            <div><dt>Taxa de captura</dt><dd>{{ p.captureRate }} / 255</dd></div>
+            <div><dt>Felicidade base</dt><dd>{{ p.baseHappiness }}</dd></div>
+            @if (p.growthRate) {
+              <div><dt>Crescimento</dt><dd>{{ p.growthRate }}</dd></div>
+            }
+            @if (p.habitat) {
+              <div><dt>Habitat</dt><dd>{{ p.habitat }}</dd></div>
+            }
+            @if (p.eggGroups.length) {
+              <div><dt>Grupos de ovo</dt><dd>{{ p.eggGroups.join(', ') }}</dd></div>
+            }
+            <div><dt>Ciclos de choco</dt><dd>{{ p.hatchCounter }}</dd></div>
+          </dl>
+        </mat-card-content>
+      </mat-card>
+
+      @if (p.evolutions.length > 1) {
+        <mat-card appearance="outlined" class="detail__span">
+          <mat-card-header><mat-card-title>Cadeia de evolução</mat-card-title></mat-card-header>
+          <mat-card-content>
+            <ul class="evolutions">
+              @for (evo of p.evolutions; track evo.id; let last = $last) {
+                <li class="evolutions__node">
+                  <a [routerLink]="['/pokedex', evo.id]" class="evolutions__link">
+                    <img
+                      [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + evo.id + '.png'"
+                      [alt]="evo.displayName"
+                      width="96"
+                      height="96"
+                      loading="lazy"
+                    />
+                    <span>{{ evo.displayName }}</span>
+                  </a>
+                  @if (!last) {
+                    <mat-icon class="evolutions__arrow" aria-hidden="true" fontIcon="arrow_forward"></mat-icon>
+                  }
+                </li>
+              }
+            </ul>
+          </mat-card-content>
+        </mat-card>
+      }
+
+      @if (p.sprites.length) {
+        <mat-card appearance="outlined">
+          <mat-card-header><mat-card-title>Sprites</mat-card-title></mat-card-header>
+          <mat-card-content class="sprites">
+            @for (sprite of p.sprites; track sprite.label) {
+              <figure class="sprites__item">
+                <img [src]="sprite.url" [alt]="p.name + ' - ' + sprite.label" width="96" height="96" loading="lazy" />
+                <figcaption>{{ sprite.label }}</figcaption>
+              </figure>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+
+      @if (p.cry) {
+        <mat-card appearance="outlined">
+          <mat-card-header><mat-card-title>Som (cry)</mat-card-title></mat-card-header>
+          <mat-card-content>
+            <audio controls [src]="p.cry" [attr.aria-label]="'Som de ' + p.name">
+              Seu navegador não suporta áudio.
+            </audio>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+
+    @if (p.moves.length) {
+      <mat-expansion-panel class="detail__moves">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Golpes ({{ p.moves.length }})</mat-panel-title>
+        </mat-expansion-panel-header>
+        <ul class="moves">
+          @for (move of p.moves; track move) {
+            <li>{{ move }}</li>
+          }
+        </ul>
+      </mat-expansion-panel>
+    }
+  </article>
+}

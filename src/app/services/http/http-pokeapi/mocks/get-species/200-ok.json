@@ -1,0 +1,22 @@
+{
+  "id": 25,
+  "name": "pikachu",
+  "is_baby": false,
+  "is_legendary": false,
+  "is_mythical": false,
+  "capture_rate": 190,
+  "base_happiness": 50,
+  "hatch_counter": 10,
+  "growth_rate": { "name": "medium", "url": "" },
+  "habitat": { "name": "forest", "url": "" },
+  "egg_groups": [{ "name": "ground", "url": "" }, { "name": "fairy", "url": "" }],
+  "genera": [
+    { "genus": "Mouse Pokémon", "language": { "name": "en", "url": "" } },
+    { "genus": "Pokémon Rato", "language": { "name": "es", "url": "" } }
+  ],
+  "flavor_text_entries": [
+    { "flavor_text": "When several of\nthese POKéMON gather.", "language": { "name": "en", "url": "" }, "version": { "name": "red", "url": "" } }
+  ],
+  "evolution_chain": { "url": "https://pokeapi.co/api/v2/evolution-chain/10/" },
+  "evolves_from_species": { "name": "pichu", "url": "https://pokeapi.co/api/v2/pokemon-species/172/" }
+}

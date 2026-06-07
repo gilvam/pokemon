@@ -1,0 +1,11 @@
+{
+  "count": 4,
+  "next": null,
+  "previous": null,
+  "results": [
+    { "name": "fire", "url": "https://pokeapi.co/api/v2/type/10/" },
+    { "name": "water", "url": "https://pokeapi.co/api/v2/type/11/" },
+    { "name": "unknown", "url": "https://pokeapi.co/api/v2/type/10001/" },
+    { "name": "shadow", "url": "https://pokeapi.co/api/v2/type/10002/" }
+  ]
+}

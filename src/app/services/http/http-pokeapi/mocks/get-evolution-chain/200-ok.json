@@ -1,0 +1,25 @@
+{
+  "id": 10,
+  "chain": {
+    "is_baby": false,
+    "species": { "name": "pichu", "url": "https://pokeapi.co/api/v2/pokemon-species/172/" },
+    "evolution_details": [],
+    "evolves_to": [
+      {
+        "is_baby": false,
+        "species": { "name": "pikachu", "url": "https://pokeapi.co/api/v2/pokemon-species/25/" },
+        "evolution_details": [
+          { "min_level": null, "min_happiness": 220, "trigger": { "name": "level-up", "url": "" }, "item": null }
+        ],
+        "evolves_to": [
+          {
+            "is_baby": false,
+            "species": { "name": "raichu", "url": "https://pokeapi.co/api/v2/pokemon-species/26/" },
+            "evolution_details": [],
+            "evolves_to": []
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+<a
+  class="card"
+  [routerLink]="['/pokedex', item().id]"
+  [style.--card-accent]="accent()"
+  [attr.aria-label]="displayName() + ', número ' + dexNumber()"
+>
+  <div class="card__media">
+    @if (imgSrc()) {
+      <img
+        class="card__image"
+        [src]="imgSrc()"
+        [alt]="displayName()"
+        width="200"
+        height="200"
+        loading="lazy"
+        decoding="async"
+        (error)="onImageError()"
+      />
+    } @else {
+      <mat-icon class="card__placeholder" aria-hidden="true" fontIcon="image_not_supported"></mat-icon>
+    }
+
+    @if (categoryBadge(); as badge) {
+      <span class="card__badge" [style.background-color]="badge.color">{{ badge.label }}</span>
+    }
+  </div>
+
+  <span class="card__number">{{ dexNumber() }}</span>
+  <span class="card__name">{{ displayName() }}</span>
+
+  <span class="card__types">
+    @for (type of item().types; track type) {
+      <app-type-chip [type]="type" />
+    }
+  </span>
+</a>
