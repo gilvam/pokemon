@@ -1,6 +1,30 @@
 {
   "version": 1,
   "skills": {
+    "angular-developer": {
+      "source": "gilvam/skills",
+      "sourceType": "github",
+      "skillPath": "skills/angular-developer/SKILL.md",
+      "computedHash": "c5958947eaf0e79954dcb7690eb09ed3dec546b009fe730681b937ad072d0b58"
+    },
+    "angular-folder-structure": {
+      "source": "gilvam/skills",
+      "sourceType": "github",
+      "skillPath": "skills/angular-folder-structure/SKILL.md",
+      "computedHash": "df28f7bc44e8f8324ce5f91793358789204f515630e53115930c89abc947a92a"
+    },
+    "angular-http": {
+      "source": "gilvam/skills",
+      "sourceType": "github",
+      "skillPath": "skills/angular-http/SKILL.md",
+      "computedHash": "20d0b09a563c085cbd3188255344bd6e8a57895abc5a0956efbbc6cb10ec5687"
+    },
+    "angular-patterns": {
+      "source": "gilvam/skills",
+      "sourceType": "github",
+      "skillPath": "skills/angular-patterns/SKILL.md",
+      "computedHash": "1c4b55d151095bd3abdb78af64eb411a73f371ba5623bfe199e99e4799afcd7c"
+    },
     "code-smell": {
       "source": "gilvam/skills",
       "sourceType": "github",
@@ -36,6 +60,12 @@
       "sourceType": "github",
       "skillPath": "skills/symlinks/SKILL.md",
       "computedHash": "da2f08f1b98405c7db0549b1de2c706b38635f0e827265b436eecbd8fe840245"
+    },
+    "typescript-patterns": {
+      "source": "gilvam/skills",
+      "sourceType": "github",
+      "skillPath": "skills/typescript-patterns/SKILL.md",
+      "computedHash": "9b653c6786bad557fc13dd9de7de0b931121ebaa1455c97dc4038f2469228fa1"
     },
     "vitest-testing": {
       "source": "gilvam/skills",
