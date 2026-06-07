@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "skills": {
+    "code-smell": {
+      "source": "gilvam/skills",
+      "sourceType": "github",
+      "skillPath": "skills/code-smell/SKILL.md",
+      "computedHash": "0dac3b60f49a0b874a2840a5425372e840ba5c64e4e3a75273f55da0224a212d"
+    },
+    "code-standards-en": {
+      "source": "gilvam/skills",
+      "sourceType": "github",
+      "skillPath": "skills/code-standards-en/SKILL.md",
+      "computedHash": "d7e42020934d577df75492c549b446c4a8d40dd2b66c78d3e5935bf2e877c2cd"
+    },
+    "context7": {
+      "source": "gilvam/skills",
+      "sourceType": "github",
+      "skillPath": "skills/context7/SKILL.md",
+      "computedHash": "46b3e1b1bf096a64c6be4f50ff004788242e02ebf8aa112b486f77bdc31df999"
+    },
+    "folder-structure-angular": {
+      "source": "gilvam/skills",
+      "sourceType": "github",
+      "skillPath": "skills/folder-structure-angular/SKILL.md",
+      "computedHash": "7962e9fd8f651290a4bed5ad3d375554bb0249435fe136bce35194b23d25a720"
+    },
+    "http-angular": {
+      "source": "gilvam/skills",
+      "sourceType": "github",
+      "skillPath": "skills/http-angular/SKILL.md",
+      "computedHash": "5e809fd8f894f3239aa9f8481fa626c337033a539b8f2f0c0b1357d317f2bb93"
+    },
+    "symlinks": {
+      "source": "gilvam/skills",
+      "sourceType": "github",
+      "skillPath": "skills/symlinks/SKILL.md",
+      "computedHash": "da2f08f1b98405c7db0549b1de2c706b38635f0e827265b436eecbd8fe840245"
+    },
+    "vitest-testing": {
+      "source": "gilvam/skills",
+      "sourceType": "github",
+      "skillPath": "skills/vitest-testing/SKILL.md",
+      "computedHash": "b1a08091e493a1a1b7742df7815db34f699f4c4fa0618c0c4b718050d4f59ce6"
+    }
+  }
+}
