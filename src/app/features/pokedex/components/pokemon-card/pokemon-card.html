@@ -1,0 +1,39 @@
+<a
+  class="pokemon-card__link"
+  [routerLink]="['/pokedex', pokemon().id]"
+  [attr.aria-label]="ariaLabel()"
+>
+  <mat-card
+    class="pokemon-card"
+    appearance="outlined"
+    [style.background]="background()"
+    [style.color]="cardTextColor"
+  >
+    <span class="pokemon-card__number">{{ pokedexNumber() }}</span>
+
+    <div class="pokemon-card__image-wrap">
+      <img
+        class="pokemon-card__image"
+        [src]="imageSrc()"
+        [width]="imageSize"
+        [height]="imageSize"
+        [alt]="pokemon().name"
+        loading="lazy"
+        decoding="async"
+        (error)="onImageError()"
+      />
+    </div>
+
+    <h2 class="pokemon-card__name">{{ pokemon().name }}</h2>
+
+    <div class="pokemon-card__types">
+      @for (type of pokemon().types; track type) {
+        <app-type-chip [type]="type" />
+      }
+    </div>
+
+    @if (pokemon().rarity) {
+      <app-rarity-badge [rarity]="pokemon().rarity" />
+    }
+  </mat-card>
+</a>

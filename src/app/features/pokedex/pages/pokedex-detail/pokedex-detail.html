@@ -1,0 +1,151 @@
+<div class="detail">
+  <button matButton type="button" class="detail__back" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+    Voltar
+  </button>
+
+  @switch (status()) {
+    @case ('loading') {
+      <div class="detail__center" aria-live="polite">
+        <mat-progress-spinner mode="indeterminate" diameter="56" aria-label="Carregando Pokémon" />
+      </div>
+    }
+
+    @case ('notfound') {
+      <div class="detail__center" role="alert">
+        <mat-icon>help_outline</mat-icon>
+        <p>Pokémon não encontrado.</p>
+      </div>
+    }
+
+    @case ('error') {
+      <div class="detail__center" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <p>Não foi possível carregar este Pokémon. Tente novamente.</p>
+      </div>
+    }
+
+    @case ('ready') {
+      <article class="detail__content">
+        <header
+          class="detail__header"
+          [style.background]="headerBackground()"
+          [style.color]="cardTextColor"
+        >
+          <img class="detail__artwork" [src]="artwork()" [alt]="name()" width="240" height="240" />
+          <div class="detail__heading">
+            <span class="detail__number">{{ pokedexNumber() }}</span>
+            <h1 class="detail__name">{{ name() }}</h1>
+            @if (genus()) {
+              <p class="detail__genus">{{ genus() }}</p>
+            }
+            <div class="detail__types">
+              @for (type of types(); track type) {
+                <app-type-chip [type]="type" />
+              }
+            </div>
+            <app-rarity-badge [rarity]="rarity()" />
+          </div>
+        </header>
+
+        @if (flavorText()) {
+          <p class="detail__flavor">{{ flavorText() }}</p>
+        }
+
+        <section class="detail__section" aria-labelledby="stats-title">
+          <h2 id="stats-title">Estatísticas base</h2>
+          <div class="detail__stats">
+            @for (stat of stats(); track stat.label) {
+              <app-stat-bar [label]="stat.label" [value]="stat.value" />
+            }
+            <app-stat-bar label="Total" [value]="statTotal()" [max]="800" />
+          </div>
+        </section>
+
+        <section class="detail__section" aria-labelledby="about-title">
+          <h2 id="about-title">Características</h2>
+          <mat-list>
+            <mat-list-item><span matListItemTitle>Altura</span>{{ height() }} m</mat-list-item>
+            <mat-list-item><span matListItemTitle>Peso</span>{{ weight() }} kg</mat-list-item>
+            <mat-list-item><span matListItemTitle>Experiência base</span>{{ baseExperience() }}</mat-list-item>
+            <mat-list-item><span matListItemTitle>Taxa de captura</span>{{ captureRate() }}</mat-list-item>
+            <mat-list-item><span matListItemTitle>Felicidade base</span>{{ baseHappiness() }}</mat-list-item>
+            <mat-list-item><span matListItemTitle>Crescimento</span>{{ growthRate() }}</mat-list-item>
+            @if (habitat()) {
+              <mat-list-item><span matListItemTitle>Habitat</span>{{ habitat() }}</mat-list-item>
+            }
+            <mat-list-item><span matListItemTitle>Grupos de ovo</span>{{ eggGroups().join(', ') }}</mat-list-item>
+          </mat-list>
+        </section>
+
+        <section class="detail__section" aria-labelledby="abilities-title">
+          <h2 id="abilities-title">Habilidades</h2>
+          <ul class="detail__abilities">
+            @for (ability of abilities(); track ability.name) {
+              <li>
+                {{ ability.name }}
+                @if (ability.hidden) {
+                  <span class="detail__hidden">(oculta)</span>
+                }
+              </li>
+            }
+          </ul>
+        </section>
+
+        @if (evolution().length > 1) {
+          <section class="detail__section" aria-labelledby="evolution-title">
+            <h2 id="evolution-title">Evolução</h2>
+            <ol class="detail__evolution">
+              @for (stage of evolution(); track stage.id; let last = $last) {
+                <li class="detail__evo-stage">
+                  <a [routerLink]="['/pokedex', stage.id]" class="detail__evo-link">
+                    <img [src]="artworkFor(stage.id)" [alt]="stage.name" width="96" height="96" loading="lazy" />
+                    <span>{{ stage.name }}</span>
+                  </a>
+                  @if (!last) {
+                    <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+                  }
+                </li>
+              }
+            </ol>
+          </section>
+        }
+
+        @if (sprites().length > 0) {
+          <section class="detail__section" aria-labelledby="sprites-title">
+            <h2 id="sprites-title">Sprites</h2>
+            <mat-tab-group>
+              @for (sprite of sprites(); track sprite.label) {
+                <mat-tab [label]="sprite.label">
+                  <img class="detail__sprite" [src]="sprite.url" [alt]="name() + ' — ' + sprite.label" width="120" height="120" loading="lazy" />
+                </mat-tab>
+              }
+            </mat-tab-group>
+          </section>
+        }
+
+        @if (cry()) {
+          <section class="detail__section" aria-labelledby="cry-title">
+            <h2 id="cry-title">Som</h2>
+            <audio controls [src]="cry()" [attr.aria-label]="'Som de ' + name()"></audio>
+          </section>
+        }
+
+        @if (moves().length > 0) {
+          <section class="detail__section">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>Golpes ({{ moves().length }})</mat-panel-title>
+              </mat-expansion-panel-header>
+              <ul class="detail__moves">
+                @for (move of moves(); track move) {
+                  <li>{{ move }}</li>
+                }
+              </ul>
+            </mat-expansion-panel>
+          </section>
+        }
+      </article>
+    }
+  }
+</div>

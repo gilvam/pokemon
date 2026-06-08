@@ -1,0 +1,55 @@
+<section class="list">
+  <app-pokemon-filters [form]="form" (clearFilters)="onClearFilters()" />
+
+  <div class="list__status" aria-live="polite">
+    @if (store.status() === 'loading') {
+      <p>Carregando Pokédex…</p>
+      <mat-progress-bar mode="indeterminate" aria-label="Carregando lista de Pokémon" />
+    }
+
+    @if (store.rarityStatus() === 'loading') {
+      <p>
+        Carregando raridades… {{ store.rarityLoaded() }} de {{ store.rarityTotal() }}
+      </p>
+      <mat-progress-bar
+        mode="determinate"
+        [value]="(store.rarityLoaded() / store.rarityTotal()) * 100"
+        aria-label="Carregando índice de raridade"
+      />
+    }
+  </div>
+
+  @if (store.status() === 'error') {
+    <div class="list__error" role="alert">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ store.errorMessage() }}</p>
+      <button matButton="filled" type="button" (click)="store.retry()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (store.status() === 'ready') {
+    @if (store.total() > 0) {
+      <ul class="list__grid">
+        @for (pokemon of store.pagePokemon(); track pokemon.id) {
+          <li class="list__item">
+            <app-pokemon-card [pokemon]="pokemon" />
+          </li>
+        }
+      </ul>
+
+      <mat-paginator
+        [length]="store.total()"
+        [pageSize]="store.pageSize()"
+        [pageIndex]="store.pageIndex()"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPage($event)"
+      />
+    } @else {
+      <div class="list__empty">
+        <mat-icon>search_off</mat-icon>
+        <p>Nenhum Pokémon encontrado com os filtros atuais.</p>
+        <button matButton type="button" (click)="onClearFilters()">Limpar filtros</button>
+      </div>
+    }
+  }
+</section>

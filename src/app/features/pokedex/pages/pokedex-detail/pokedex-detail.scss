@@ -1,0 +1,142 @@
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detail__back {
+  align-self: flex-start;
+}
+
+.detail__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 4rem 1rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.detail__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.detail__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 20px;
+}
+
+.detail__artwork {
+  width: 240px;
+  max-width: 50vw;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.25));
+}
+
+.detail__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detail__number {
+  font: var(--mat-sys-title-medium);
+  font-weight: 700;
+  opacity: 0.75;
+}
+
+.detail__name {
+  margin: 0;
+  font: var(--mat-sys-display-small);
+  text-transform: capitalize;
+}
+
+.detail__genus {
+  margin: 0;
+  font: var(--mat-sys-title-small);
+}
+
+.detail__types {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.detail__flavor {
+  margin: 0;
+  font: var(--mat-sys-body-large);
+  max-width: 70ch;
+}
+
+.detail__section h2 {
+  font: var(--mat-sys-title-large);
+  margin: 0 0 0.75rem;
+}
+
+.detail__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 520px;
+}
+
+.detail__abilities,
+.detail__moves {
+  margin: 0;
+  padding-left: 1.25rem;
+  text-transform: capitalize;
+}
+
+.detail__moves {
+  columns: 2;
+}
+
+.detail__hidden {
+  color: var(--mat-sys-on-surface-variant);
+  font-style: italic;
+}
+
+.detail__evolution {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detail__evo-stage {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detail__evo-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  text-transform: capitalize;
+  padding: 0.5rem;
+  border-radius: 12px;
+}
+
+.detail__evo-link:hover,
+.detail__evo-link:focus-visible {
+  background: var(--mat-sys-surface-container-high);
+}
+
+.detail__sprite {
+  display: block;
+  margin: 1rem auto;
+  image-rendering: pixelated;
+}

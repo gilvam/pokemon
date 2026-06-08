@@ -23,27 +23,6 @@ Decisões do usuário:
 
 ---
 
-## Fase 0 — Skills & convenções (obrigatório ANTES de codar)
-
-O `AGENTS.md` manda **acionar a skill relevante antes de escrever ou revisar código**. Este é um
-passo de execução, não uma nota de rodapé. Antes de qualquer arquivo:
-
-1. **Ler os `SKILL.md`** das áreas tocadas e seguir suas regras:
-   - `folder-structure-angular` — layout `core`/`shared`/`features`, co-localização, rotas lazy.
-   - `http-angular` — **toda** integração REST em `src/app/services/http/http-<nome>/` com DTOs
-     `@NoNull()` (`create()/createArray()`, mapeamento explícito de aninhados), `mock.service` e
-     specs (DTO null-safety + `HttpTestingController` com casos de erro). Validar/vendorizar o
-     decorator `@NoNull()` em `src/app/_decorators/class.decorator.ts`.
-   - `angular-material` — abrir `references/components/component-*.md` p/ confirmar a API da versão.
-   - `vitest-testing` — `vi` para mocks, AAA, um comportamento por teste, HTTP como integração.
-2. **`context7` (`ctx7`)** — confirmar padrões atuais de Angular v22 `HttpClient`/testing antes do
-   módulo HTTP (`ctx7 library angular …` → `ctx7 docs <id> …`, máx. 3 chamadas).
-3. **Revisão antes de fechar** — passada `code-smell` + `code-standards-en` (identificadores em
-   inglês, verbo-first, params como objeto, CQS, early returns, limites de tamanho).
-4. **Gate de verificação** — `ng build` **+ `ng lint` +** `ng test` (todos verdes).
-
----
-
 ## Estratégia de dados (a parte crítica de performance)
 
 A PokeAPI lista Pokémon (`/pokemon?limit=...`) sem tipos nem raridade. Em vez de fazer
@@ -91,25 +70,25 @@ tema M3, e substituir o `app.html` placeholder por um `mat-toolbar` + `<router-o
 **Setup**: `ng add @angular/material` (tema M3, tipografia, animações). Importar
 `MatIconModule` (Material Symbols) e registrar tema acessível em `styles.scss`.
 
-**`pokedex-list`** (Reactive Forms para os filtros, estado em signals + `computed`):
+**`pokedex-list`**:
 - `mat-toolbar` com título "Pokédex".
 - Barra de filtros: `mat-form-field`+`matInput` (busca por nome, com debounce),
   `mat-select` (ordenar: Nº ↑/↓, Nome A–Z/Z–A), `mat-select multiple` ou
   `mat-chip-listbox` (tipos, múltiplos, AND), `mat-button-toggle`/`mat-select`
   (raridade: categorias + faixas). Botão "Limpar filtros".
-- `computed()` aplica busca + tipos + raridade + ordenação sobre o índice; resultado
+- A filtragem aplica busca + tipos + raridade + ordenação sobre o índice; resultado
   paginado por `mat-paginator` (ex.: 24/página).
-- Grid responsivo (CSS grid via `style`/classe, sem `ngStyle`/`ngClass`) de
-  `pokemon-card`. Estados: `mat-progress-bar` (carregando índice/raridade),
-  vazio ("nenhum Pokémon encontrado"), erro (`MatSnackBar` + botão tentar de novo).
+- Grid responsivo (CSS grid) de `pokemon-card`. Estados: `mat-progress-bar`
+  (carregando índice/raridade), vazio ("nenhum Pokémon encontrado"), erro
+  (`MatSnackBar` + botão tentar de novo).
 - Sincronizar filtros/página com query params para deep-link e voltar do detalhe.
 
-**`pokemon-card`** (`input()` do resumo; template inline):
-- `mat-card` clicável → navega para `/pokedex/:id`. Imagem grande via `NgOptimizedImage`
-  (width/height + `alt` com o nome). Nº (#0001), nome capitalizado, `type-chip`s e badge
-  de raridade. `loading="lazy"`, foco/teclado acessível (card é link/botão real).
+**`pokemon-card`** (recebe o resumo do Pokémon):
+- `mat-card` clicável → navega para `/pokedex/:id`. Imagem grande (width/height + `alt`
+  com o nome). Nº (#0001), nome capitalizado, `type-chip`s e badge de raridade.
+  `loading="lazy"`, foco/teclado acessível (card é link/botão real).
 
-**`pokemon-detail`** (rota com `:id`; usa `resource()`/`rxResource` ou `httpResource`):
+**`pokemon-detail`** (rota com `:id`):
 - Cabeçalho: artwork grande, nº, nome, *genus*, `type-chip`s, badges de raridade.
 - Stats base com `stat-bar` (HP, Atk, Def, SpA, SpD, Spd + total).
 - Medidas (altura/peso), base experience, habilidades (com flag "oculta"),
@@ -126,7 +105,7 @@ tema M3, e substituir o `app.html` placeholder por um `mat-toolbar` + `<router-o
 ## Acessibilidade (obrigatório: AXE / WCAG AA)
 
 - `type-color.ts` define cor de fundo **e** cor de texto com contraste ≥ 4.5:1 por tipo.
-- Toda imagem com `alt` descritivo; `NgOptimizedImage` com `width`/`height` (sem CLS).
+- Toda imagem com `alt` descritivo e `width`/`height` (sem CLS).
 - Cards são elementos interativos reais (link/botão) com foco visível e navegação por teclado.
 - `stat-bar` com `role="progressbar"` + `aria-valuenow/min/max` e rótulo textual.
 - Filtros com `<label>`/`aria-label`; `mat-paginator` com labels em PT.
@@ -135,22 +114,20 @@ tema M3, e substituir o `app.html` placeholder por um `mat-toolbar` + `<router-o
 
 ---
 
-## Testes (Vitest)
+## Testes
 
 - `sprites.ts`: monta URL correta e *fallback*.
 - `rarity.ts`: categoria e faixa a partir de species mockada (limites 3/45/120).
 - Lógica de filtro/ordenação (tipos múltiplos AND, busca, sort) — funções puras testáveis.
-- `pokeapi.service`: `provideHttpClient` + `provideHttpClientTesting`, asserts de URL e
-  mapeamento de payload.
+- `pokeapi.service`: asserts de URL e mapeamento de payload.
 - Smoke tests de `pokedex-list` e `pokemon-detail` (render + estados de loading/erro).
-- Usar fakes/mocks com `vi`, padrão Arrange–Act–Assert (skill `vitest-testing`).
 
 ---
 
 ## Verificação end-to-end
 
-1. `ng build` — sem erros (rodar ao final, conforme skill angular-developer).
-2. `ng lint` — sem erros (gate exigido pelo AGENTS.md).
+1. `ng build` — sem erros.
+2. `ng lint` — sem erros.
 3. `npm test` (Vitest) — verde.
 4. `ng serve` e validar manualmente:
    - Lista carrega com imagens; ordenar por nº/nome funciona.
@@ -159,18 +136,5 @@ tema M3, e substituir o `app.html` placeholder por um `mat-toolbar` + `<router-o
      e faixas por capture_rate).
    - Clicar num card abre o detalhe com stats, evolução, sprites e cry.
    - Voltar preserva filtros/página (query params).
-4. Rodar AXE (DevTools/extensão) na lista e no detalhe — zero violações; checar contraste
+5. Rodar AXE (DevTools/extensão) na lista e no detalhe — zero violações; checar contraste
    das chips de tipo e foco por teclado.
-
----
-
-## Notas / convenções do repositório
-
-- Standalone + signals + `inject()`; `input()`/`output()`; controle de fluxo nativo
-  (`@if`/`@for`/`@switch`); `class`/`style` bindings (nunca `ngClass`/`ngStyle`);
-  sem `NgModule`; sem `standalone: true` no decorator.
-- Integração HTTP isolada em `services/http/http-pokeapi/` com DTOs `@NoNull()` e factories
-  `create()/createArray()` (skill `http-angular`); estado/helpers de domínio ficam em
-  `core/pokedex/` (skill `folder-structure-angular`).
-- Consultar a skill `angular-material` para componentes/tema M3 e a `angular-developer`
-  para `resource()`/forms/SSR antes de implementar cada parte.

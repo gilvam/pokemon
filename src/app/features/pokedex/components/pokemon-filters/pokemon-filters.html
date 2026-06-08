@@ -1,0 +1,59 @@
+<form class="filters" [formGroup]="form()">
+  <mat-form-field class="filters__search" appearance="outline">
+    <mat-label>Buscar por nome ou número</mat-label>
+    <mat-icon matIconPrefix aria-hidden="true">search</mat-icon>
+    <input matInput type="search" formControlName="search" autocomplete="off" />
+    @if (form().controls.search.value) {
+      <button
+        matIconButton
+        matSuffix
+        type="button"
+        aria-label="Limpar busca"
+        (click)="form().controls.search.setValue('')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+
+  <mat-form-field class="filters__sort" appearance="outline">
+    <mat-label>Ordenar</mat-label>
+    <mat-select formControlName="sort">
+      @for (option of sortOptions; track option) {
+        <mat-option [value]="option">{{ sortLabels[option] }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="filters__types" appearance="outline">
+    <mat-label>Tipos (todos)</mat-label>
+    <mat-select formControlName="types" multiple>
+      @for (type of types; track type) {
+        <mat-option [value]="type">{{ typeLabels[type] }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="filters__category" appearance="outline">
+    <mat-label>Raridade</mat-label>
+    <mat-select formControlName="categories" multiple>
+      @for (category of categories; track category) {
+        <mat-option [value]="category">{{ categoryLabels[category] }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="filters__tier" appearance="outline">
+    <mat-label>Faixa de captura</mat-label>
+    <mat-select formControlName="tiers" multiple>
+      @for (tier of tiers; track tier) {
+        <mat-option [value]="tier">{{ tierLabels[tier] }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <button matButton="outlined" type="button" class="filters__clear" (click)="clearFilters.emit()">
+    <mat-icon>filter_alt_off</mat-icon>
+    Limpar filtros
+  </button>
+</form>
