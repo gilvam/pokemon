@@ -43,8 +43,8 @@ Do **not** use it for component/UI logic, state management, or non-HTTP services
    [references/context7-lookup.md](references/context7-lookup.md).
 2. **Validate the `@Dto()` decorator** (vendor it only if missing) — see
    [references/decorator.md](references/decorator.md).
-3. **Confirm the endpoint contracts and scaffold the folder** — see
-   [references/folder-structure.md](references/folder-structure.md).
+3. **Confirm the endpoint contracts, resolve a redundancy-free service name, and scaffold the folder** —
+   see [references/folder-structure.md](references/folder-structure.md).
 4. **Generate DTOs inside-out** (leaf DTOs first, then parents) — see
    [references/dto.md](references/dto.md).
 5. **Add success + error mocks** under `jsons/[method]/`.
@@ -73,6 +73,11 @@ Do **not** use it for component/UI logic, state management, or non-HTTP services
   inside the owning feature (`features/<feature>/services/http/…`) when a single feature uses it, otherwise at
   the app root (`[app-root]/services/http/…`, default `src/app`). Promote to the app root only on a **second**
   consumer. See [references/folder-structure.md](references/folder-structure.md).
+- The `[service-name]` is the **domain/resource noun only** — never pad it with words that restate the
+  HTTP/REST/API transport (`api`, `rest`, `endpoint`, `webapi`, `service`, `client`, `gateway`, …) or with
+  generic filler (`util`, `helper`, `manager`, `data`, …). The `services/http/` folder, the `http-` prefix,
+  the `.service.ts` suffix and the `Http…Service` class already convey all of that. See
+  [references/folder-structure.md](references/folder-structure.md).
 
 ## References
 
@@ -91,6 +96,10 @@ Do **not** use it for component/UI logic, state management, or non-HTTP services
 - Don't park a single-feature client at the app root — co-locate it with its feature; promote to the root
   only when a second feature consumes it.
 - No raw API JSON returned from services.
+- Never pad `[service-name]` with redundant transport/role words (`api`, `rest`, `endpoint`, `webapi`,
+  `service`, `client`, `gateway`, …) or generic filler (`util`, `helper`, `manager`, `data`, …):
+  `http-weather-api.service.ts` → `http-weather.service.ts`. See **Naming the service** in
+  [references/folder-structure.md](references/folder-structure.md).
 - Never skip `create()` / `createArray()` in services, even when the type looks compatible.
 - Never lean on `@Dto()` for nested conversion — parents must call child factories.
 - Never declare DTO properties in the API's casing (e.g. `first_name`) — enable

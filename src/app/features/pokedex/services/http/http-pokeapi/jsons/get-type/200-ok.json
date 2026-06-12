@@ -1,0 +1,11 @@
+{
+  "id": 12,
+  "name": "grass",
+  "pokemon": [
+    {
+      "slot": 1,
+      "pokemon": { "name": "bulbasaur", "url": "https://pokeapi.co/api/v2/pokemon/1/" }
+    },
+    { "slot": 1, "pokemon": { "name": "oddish", "url": "https://pokeapi.co/api/v2/pokemon/43/" } }
+  ]
+}

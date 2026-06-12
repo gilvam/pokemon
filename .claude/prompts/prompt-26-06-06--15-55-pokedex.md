@@ -119,7 +119,6 @@ tema M3, e substituir o `app.html` placeholder por um `mat-toolbar` + `<router-o
 - `sprites.ts`: monta URL correta e *fallback*.
 - `rarity.ts`: categoria e faixa a partir de species mockada (limites 3/45/120).
 - Lógica de filtro/ordenação (tipos múltiplos AND, busca, sort) — funções puras testáveis.
-- `pokeapi.service`: asserts de URL e mapeamento de payload.
 - Smoke tests de `pokedex-list` e `pokemon-detail` (render + estados de loading/erro).
 
 ---
