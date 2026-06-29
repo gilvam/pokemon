@@ -6,6 +6,15 @@
 /out-tsc
 /bazel-out
 
+# Cópia local da PokeAPI (gerada por tools/pokeapi-mirror/download.mjs)
+/pokeapi-mirror
+
+# Playwright (e2e)
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
+
 # Node
 /node_modules
 npm-debug.log

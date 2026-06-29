@@ -6,14 +6,15 @@ import { TypeDto } from './models/type.dto';
 import { PokemonDto } from './models/pokemon.dto';
 import { PokemonSpeciesDto } from './models/pokemon-species.dto';
 import { EvolutionChainDto } from './models/evolution-chain.dto';
+import { environment } from '@environments/environment';
 
-/** Typed client for the public PokeAPI v2 endpoints used by the Pokédex. */
+/** Typed client for the local PokeAPI v2 mirror used by the Pokédex. */
 @Injectable({
   providedIn: 'root',
 })
 export class HttpPokeapiService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'https://pokeapi.co/api/v2';
+  private readonly baseUrl = environment.pokeapiBaseUrl;
 
   /** Master index of every Pokémon (name + url); id is derived from the url. */
   getIndex(limit = 100000, offset = 0): Observable<PokemonListResponseDto> {

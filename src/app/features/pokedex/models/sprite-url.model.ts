@@ -1,7 +1,8 @@
+import { environment } from '@environments/environment';
+
 /** Builds Pokémon image URLs straight from the id — no extra HTTP request. */
 export class SpriteUrl {
-  private static readonly base =
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
+  private static readonly base = `${environment.mediaBaseUrl}/sprites/pokemon`;
 
   /** High-resolution official artwork. */
   static artwork(id: number): string {

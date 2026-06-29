@@ -2,6 +2,19 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.0.
 
+## Offline (sem internet)
+
+O app consome uma **cópia local da PokeAPI** (JSON + imagens/gifs + áudios), então roda
+sem internet. Baixe o mirror uma vez (numa máquina com internet) e sirva tudo localmente:
+
+```bash
+npm run mirror:download     # gera ./pokeapi-mirror (~2,2 GB, fora do git)
+npm run build
+npm run serve:ssr:pokemon   # app + API + mídia em http://localhost:4000
+```
+
+Detalhes e fluxo de `ng serve` em [`tools/pokeapi-mirror/README.md`](tools/pokeapi-mirror/README.md).
+
 ## Development server
 
 To start a local development server, run:

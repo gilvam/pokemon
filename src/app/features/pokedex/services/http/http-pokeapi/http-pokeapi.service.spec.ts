@@ -14,8 +14,9 @@ import getSpeciesMock from './jsons/get-species/200-ok.json';
 import getEvolutionChainMock from './jsons/get-evolution-chain/200-ok.json';
 import mock404NotFound from './jsons/get-pokemon/404-not-found.json';
 import mock500InternalServerError from './jsons/get-pokemon/500-internal-server-error.json';
+import { environment } from '@environments/environment';
 
-const baseUrl = 'https://pokeapi.co/api/v2';
+const baseUrl = environment.pokeapiBaseUrl;
 
 describe('HttpPokeapiService', () => {
   let service: HttpPokeapiService;
