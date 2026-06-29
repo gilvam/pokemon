@@ -10,6 +10,7 @@ import { createPokeapiMirrorRouter } from './mirror-router.mjs';
 
 const port = Number(process.env.POKEAPI_PORT ?? 4001);
 const mirrorDir = resolve(process.env.POKEAPI_MIRROR_DIR ?? './pokeapi-mirror');
+const latencyMs = Number(process.env.POKEAPI_LATENCY_MS ?? 1000);
 
 if (!existsSync(mirrorDir)) {
   console.error(`✗ Pasta do mirror não encontrada: ${mirrorDir}`);
@@ -18,9 +19,17 @@ if (!existsSync(mirrorDir)) {
 }
 
 const app = express();
+
+if (latencyMs > 0) {
+  app.use((_req, _res, next) => setTimeout(next, latencyMs));
+}
+
 app.use(createPokeapiMirrorRouter({ mirrorDir }));
 
 app.listen(port, () => {
   console.log(`PokeAPI offline servindo em http://localhost:${port}/api/v2`);
   console.log(`Imagens em http://localhost:${port}/media/sprites/...`);
+  if (latencyMs > 0) {
+    console.log(`Latência artificial: ${latencyMs}ms por requisição`);
+  }
 });
