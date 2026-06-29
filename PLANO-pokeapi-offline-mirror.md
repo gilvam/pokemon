@@ -33,7 +33,7 @@ e validar o app 100% offline.
 ## Approach
 
 1. Baixar os repositórios oficiais (cópia idêntica) para uma pasta **gitignored**
-   `pokeapi-mirror/` e gerar índices auxiliares (nome→ID e lista completa por endpoint).
+   `api/` e gerar índices auxiliares (nome→ID e lista completa por endpoint).
 2. Um **router Express compartilhado** que serve `/api/v2` e `/media` a partir do mirror,
    com: paginação fiel, resolução nome→ID, reescrita on-the-fly das URLs de sprite para
    `/media/...`, CORS e `Content-Type: application/json`. Os arquivos em disco permanecem
@@ -42,15 +42,15 @@ e validar o app 100% offline.
    também via servidor standalone + `proxy.conf.json` para o fluxo `ng serve`.
 4. Apontar o app para o mirror via environment (URLs relativas), sem quebrar o código atual.
 
-## Aquisição de dados (`tools/pokeapi-mirror/download.mjs`)
+## Aquisição de dados (`api/_serve/download.mjs`)
 
 Script Node ESM, executado **uma vez numa máquina com internet**:
 
 - Baixa o tarball `https://github.com/PokeAPI/api-data/archive/refs/heads/master.tar.gz`,
-  extrai apenas `data/api/v2/` → `pokeapi-mirror/data/api/v2/`.
+  extrai apenas `data/api/v2/` → `api/data/api/v2/`.
 - Baixa o tarball `https://github.com/PokeAPI/sprites/archive/refs/heads/master.tar.gz`,
-  extrai `sprites/` → `pokeapi-mirror/media/sprites/`.
-- Varre `data/api/v2/<endpoint>/*/index.json` e gera, em `pokeapi-mirror/index/`:
+  extrai `sprites/` → `api/media/sprites/`.
+- Varre `data/api/v2/<endpoint>/*/index.json` e gera, em `api/index/`:
   - `<endpoint>.json` = `{ count, results: [{ name, url }] }` ordenado por id (lista
     completa, usada para paginação).
   - `<endpoint>.names.json` = mapa `nome → id` (usado para resolver lookups por nome).
@@ -59,14 +59,14 @@ Script Node ESM, executado **uma vez numa máquina com internet**:
 
 Resultado (~1,9 GB), **não versionado**:
 ```
-pokeapi-mirror/
+api/
   data/api/v2/<endpoint>/<id>/index.json   # idêntico ao upstream
   media/sprites/...                        # idêntico ao upstream
   index/<endpoint>.json                    # lista completa p/ paginação
   index/<endpoint>.names.json              # nome→id
 ```
 
-## Router do mirror (`tools/pokeapi-mirror/mirror-router.mjs`)
+## Router do mirror (`api/_serve/mirror-router.mjs`)
 
 Factory `createPokeapiMirrorRouter({ dataDir, mediaDir, indexDir, mediaBase = '/media' })`
 que devolve um `express.Router`:
@@ -80,15 +80,15 @@ que devolve um `express.Router`:
   `https://raw.githubusercontent.com/PokeAPI/sprites/master/` → `${mediaBase}/` e responde
   `application/json`.
 - `GET /media/*` → `express.static(mediaDir)` (mapeia `/media/sprites/pokemon/6.png` →
-  `pokeapi-mirror/media/sprites/pokemon/6.png`).
+  `api/media/sprites/pokemon/6.png`).
 - Headers CORS em tudo, para consumo por qualquer cliente.
 
 Reutilizado por dois pontos de entrada:
 
-- `tools/pokeapi-mirror/serve.mjs` — servidor standalone (porta 4001) para `ng serve` dev.
+- `api/_serve/serve.mjs` — servidor standalone (porta 4001) para `ng serve` dev.
 - `src/server.ts` — montar `app.use(createPokeapiMirrorRouter({...}))` **antes** do
   fallthrough do Angular SSR, resolvendo o `dataDir`/`mediaDir` por env
-  (`POKEAPI_MIRROR_DIR`, default `./pokeapi-mirror`).
+  (`POKEAPI_MIRROR_DIR`, default `./api`).
 
 ## Fiação do app Angular
 
@@ -105,23 +105,23 @@ Reutilizado por dois pontos de entrada:
 - `proxy.conf.json` (raiz) encaminhando `/api/v2` e `/media` → `http://localhost:4001`;
   apontar `serve.options.proxyConfig` em `angular.json`.
 - `package.json` scripts:
-  - `mirror:download` → `node tools/pokeapi-mirror/download.mjs`
-  - `serve:pokeapi` → `node tools/pokeapi-mirror/serve.mjs`
+  - `mirror:download` → `node api/_serve/download.mjs`
+  - `serve:pokeapi` → `node api/_serve/serve.mjs`
   - `serve:ssr:pokemon` (já existe) passa a servir app + API + imagens, **offline-completo**.
-- `.gitignore`: adicionar `/pokeapi-mirror`.
+- `.gitignore`: ignorar os dados de `/api` (`/api/data`, `/api/index`, `/api/media`, `/api/.tmp`).
 
 ## Arquivos principais
 
-- Novos: `tools/pokeapi-mirror/download.mjs`, `tools/pokeapi-mirror/mirror-router.mjs`,
-  `tools/pokeapi-mirror/serve.mjs`, `src/environments/environment.ts` (+ `.development.ts`),
+- Novos: `api/_serve/download.mjs`, `api/_serve/mirror-router.mjs`,
+  `api/_serve/serve.mjs`, `src/environments/environment.ts` (+ `.development.ts`),
   `proxy.conf.json`.
 - Editados: `src/server.ts` (montar router), `http-pokeapi.service.ts` (baseUrl via env),
   `angular.json` (fileReplacements + proxyConfig), `package.json` (scripts), `.gitignore`.
 
 ## Verification
 
-1. `npm run mirror:download` → conferir `pokeapi-mirror/data/api/v2/pokemon/1/index.json`,
-   `pokeapi-mirror/media/sprites/pokemon/6.png` e `pokeapi-mirror/index/pokemon.json`
+1. `npm run mirror:download` → conferir `api/data/api/v2/pokemon/1/index.json`,
+   `api/media/sprites/pokemon/6.png` e `api/index/pokemon.json`
    (count = 1351). Reportar tamanho total baixado.
 2. Build + SSR offline: `npm run build` e `npm run serve:ssr:pokemon`. Com acesso à internet
    bloqueado/desligado, validar via `curl`:
@@ -141,7 +141,7 @@ Reutilizado por dois pontos de entrada:
 - **SSR + URL relativa**: no render server-side o `HttpClient` pode exigir base absoluta.
   Mitigação: durante SSR injetar a origem (`http://localhost:${PORT}`) via interceptor/token,
   mantendo URL relativa no browser. A validar no passo 3.
-- **Tamanho/tempo**: ~1,9 GB de download; a pasta `pokeapi-mirror/` é copiada junto para a
+- **Tamanho/tempo**: ~1,9 GB de download; a pasta `api/` é copiada junto para a
   máquina offline (ou empacotada num zip de release).
 - **Atualidade**: `api-data`/`sprites` são a fonte estática oficial do próprio site; reexecutar
   `mirror:download` quando quiser atualizar.

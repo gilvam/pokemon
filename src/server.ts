@@ -6,7 +6,7 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
-import { createPokeapiMirrorRouter } from '../tools/pokeapi-mirror/mirror-router.mjs';
+import { createPokeapiMirrorRouter } from '../api/_serve/mirror-router.mjs';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -15,7 +15,7 @@ const angularApp = new AngularNodeAppEngine();
 
 /**
  * Cópia local da PokeAPI (JSON + imagens) servida offline em /api/v2 e /media.
- * A pasta do mirror é resolvida por POKEAPI_MIRROR_DIR (default ./pokeapi-mirror,
+ * A pasta do mirror é resolvida por POKEAPI_MIRROR_DIR (default ./api,
  * relativo ao diretório de onde o servidor é iniciado).
  */
 app.use(createPokeapiMirrorRouter());

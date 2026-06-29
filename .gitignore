@@ -17,6 +17,10 @@
 npm-debug.log
 yarn-error.log
 
+# PokeAPI offline mirror — dados (gerados por `npm run mirror:download`, ~2,2 GB).
+# O código fica em /api/_serve e permanece versionado.
+/api/.tmp/
+
 # IDEs and editors
 .idea/
 .project
