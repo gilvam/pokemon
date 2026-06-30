@@ -1,1 +1,0 @@
-C:/Users/gilva/IdeaProjects/pokemon/AGENTS.md
