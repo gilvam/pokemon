@@ -1,0 +1,165 @@
+@if (isLoading()) {
+  <div class="detail__loading" role="status" aria-live="polite">
+    <mat-progress-spinner mode="indeterminate" [diameter]="64" aria-label="Carregando Pokémon" />
+    <span class="visually-hidden">Carregando Pokémon…</span>
+  </div>
+}
+
+@if (isError()) {
+  <div class="detail__error">
+    <mat-icon aria-hidden="true">error</mat-icon>
+    <p>Pokémon não encontrado.</p>
+    <a matButton="filled" routerLink="/pokedex">Voltar para a Pokédex</a>
+  </div>
+}
+
+@if (data(); as d) {
+  <article class="detail">
+    <button matButton type="button" class="detail__back" (click)="goBack()">
+      <mat-icon aria-hidden="true">arrow_back</mat-icon>
+      Voltar
+    </button>
+
+    <header class="detail__header" [style.background]="headerBackground(d.pokemon)">
+      <img
+        class="detail__artwork"
+        [ngSrc]="artwork(d.pokemon.id)"
+        width="320"
+        height="320"
+        [alt]="d.pokemon.name"
+        priority
+      />
+      <div class="detail__heading">
+        <span class="detail__number">{{ numberLabel(d.pokemon.id) }}</span>
+        <h1 class="detail__name">{{ d.pokemon.name }}</h1>
+        @if (genus(d.species); as genusText) {
+          <p class="detail__genus">{{ genusText }}</p>
+        }
+        <div class="detail__types">
+          @for (type of types(d.pokemon); track type) {
+            <app-type-chip [type]="type" />
+          }
+        </div>
+        <app-rarity-badge [rarity]="rarity(d.species)" />
+      </div>
+    </header>
+
+    @if (flavor(d.species); as flavorText) {
+      <p class="detail__flavor">{{ flavorText }}</p>
+    }
+
+    <div class="detail__grid">
+      <mat-card class="detail__card" appearance="outlined">
+        <h2 class="detail__section-title">Estatísticas base</h2>
+        <div class="detail__stats">
+          @for (stat of d.pokemon.stats; track stat.stat.name) {
+            <app-stat-bar [label]="statLabel(stat.stat.name)" [value]="stat.baseStat" />
+          }
+        </div>
+        <p class="detail__total">
+          Total: <strong>{{ statTotal(d.pokemon) }}</strong>
+        </p>
+      </mat-card>
+
+      <mat-card class="detail__card" appearance="outlined">
+        <h2 class="detail__section-title">Características</h2>
+        <dl class="detail__attrs">
+          <dt>Altura</dt>
+          <dd>{{ heightMeters(d.pokemon) }}</dd>
+          <dt>Peso</dt>
+          <dd>{{ weightKg(d.pokemon) }}</dd>
+          <dt>Experiência base</dt>
+          <dd>{{ d.pokemon.baseExperience }}</dd>
+          <dt>Felicidade base</dt>
+          <dd>{{ d.species.baseHappiness }}</dd>
+          <dt>Taxa de captura</dt>
+          <dd>{{ d.species.captureRate }}</dd>
+          <dt>Crescimento</dt>
+          <dd>{{ humanize(d.species.growthRate.name) || '—' }}</dd>
+          <dt>Habitat</dt>
+          <dd>{{ humanize(d.species.habitat.name) || '—' }}</dd>
+          <dt>Grupos de ovo</dt>
+          <dd>{{ eggGroups(d.species) }}</dd>
+        </dl>
+      </mat-card>
+
+      <mat-card class="detail__card" appearance="outlined">
+        <h2 class="detail__section-title">Habilidades</h2>
+        <ul class="detail__abilities">
+          @for (ability of d.pokemon.abilities; track ability.ability.name) {
+            <li>
+              <span class="detail__ability-name">{{ humanize(ability.ability.name) }}</span>
+              @if (ability.isHidden) {
+                <span class="detail__ability-hidden">oculta</span>
+              }
+            </li>
+          }
+        </ul>
+      </mat-card>
+    </div>
+
+    @if (evolutionSteps(d.evolution).length > 1) {
+      <section class="detail__evolution" aria-labelledby="evolution-title">
+        <h2 class="detail__section-title" id="evolution-title">Linha evolutiva</h2>
+        <ol class="detail__evolution-list">
+          @for (step of evolutionSteps(d.evolution); track step.id; let last = $last) {
+            <li class="detail__evolution-item">
+              <a class="detail__evolution-link" [routerLink]="['/pokedex', step.id]">
+                <img [ngSrc]="artwork(step.id)" width="96" height="96" [alt]="step.name" />
+                <span>{{ step.name }}</span>
+              </a>
+              @if (!last) {
+                <mat-icon class="detail__evolution-arrow" aria-hidden="true"
+                  >arrow_forward</mat-icon
+                >
+              }
+            </li>
+          }
+        </ol>
+      </section>
+    }
+
+    @if (sprites(d.pokemon).length > 0) {
+      <section class="detail__sprites" aria-labelledby="sprites-title">
+        <h2 class="detail__section-title" id="sprites-title">Sprites</h2>
+        <div class="detail__sprite-grid">
+          @for (sprite of sprites(d.pokemon); track sprite.label) {
+            <figure class="detail__sprite">
+              <img
+                [ngSrc]="sprite.url"
+                width="96"
+                height="96"
+                [alt]="d.pokemon.name + ' — ' + sprite.label"
+              />
+              <figcaption>{{ sprite.label }}</figcaption>
+            </figure>
+          }
+        </div>
+      </section>
+    }
+
+    @if (d.pokemon.cries.latest) {
+      <section class="detail__cry" aria-labelledby="cry-title">
+        <h2 class="detail__section-title" id="cry-title">Som (cry)</h2>
+        <audio
+          controls
+          [src]="d.pokemon.cries.latest"
+          [attr.aria-label]="'Som de ' + d.pokemon.name"
+        ></audio>
+      </section>
+    }
+
+    @if (d.pokemon.moves.length > 0) {
+      <mat-expansion-panel class="detail__moves">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Golpes ({{ d.pokemon.moves.length }})</mat-panel-title>
+        </mat-expansion-panel-header>
+        <ul class="detail__moves-list">
+          @for (move of d.pokemon.moves; track move.move.name) {
+            <li>{{ humanize(move.move.name) }}</li>
+          }
+        </ul>
+      </mat-expansion-panel>
+    }
+  </article>
+}

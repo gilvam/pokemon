@@ -1,0 +1,35 @@
+{
+  "id": 25,
+  "name": "pikachu",
+  "is_baby": false,
+  "is_legendary": false,
+  "is_mythical": false,
+  "capture_rate": 190,
+  "base_happiness": 50,
+  "growth_rate": { "name": "medium", "url": "https://pokeapi.co/api/v2/growth-rate/2/" },
+  "habitat": { "name": "forest", "url": "https://pokeapi.co/api/v2/pokemon-habitat/2/" },
+  "color": { "name": "yellow", "url": "https://pokeapi.co/api/v2/pokemon-color/10/" },
+  "shape": { "name": "quadruped", "url": "https://pokeapi.co/api/v2/pokemon-shape/8/" },
+  "egg_groups": [
+    { "name": "ground", "url": "https://pokeapi.co/api/v2/egg-group/5/" },
+    { "name": "fairy", "url": "https://pokeapi.co/api/v2/egg-group/6/" }
+  ],
+  "genera": [
+    {
+      "genus": "Mouse Pokémon",
+      "language": { "name": "en", "url": "https://pokeapi.co/api/v2/language/9/" }
+    },
+    {
+      "genus": "ねずみポケモン",
+      "language": { "name": "ja-Hrkt", "url": "https://pokeapi.co/api/v2/language/1/" }
+    }
+  ],
+  "flavor_text_entries": [
+    {
+      "flavor_text": "When several of these POKéMON gather, their electricity could build and cause lightning storms.",
+      "language": { "name": "en", "url": "https://pokeapi.co/api/v2/language/9/" },
+      "version": { "name": "red", "url": "https://pokeapi.co/api/v2/version/1/" }
+    }
+  ],
+  "evolution_chain": { "url": "https://pokeapi.co/api/v2/evolution-chain/10/" }
+}

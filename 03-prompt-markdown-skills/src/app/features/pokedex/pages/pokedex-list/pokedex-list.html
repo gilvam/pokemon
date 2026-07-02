@@ -1,0 +1,55 @@
+<section class="pokedex">
+  <h1 class="pokedex__title">Pokédex</h1>
+
+  <app-pokemon-filters [form]="form" (clear)="onClear()" />
+
+  <div class="pokedex__status" role="status" aria-live="polite">
+    @if (isLoading()) {
+      <span>Carregando Pokédex…</span>
+    }
+    @if (rarityLoading()) {
+      <span>Carregando raridades… {{ rarityProgress() }}%</span>
+    }
+  </div>
+
+  @if (isLoading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Carregando Pokédex" />
+  }
+  @if (rarityLoading()) {
+    <mat-progress-bar
+      mode="determinate"
+      [value]="rarityProgress()"
+      aria-label="Carregando índice de raridades"
+    />
+  }
+
+  @if (isError()) {
+    <div class="pokedex__error">
+      <mat-icon aria-hidden="true">error</mat-icon>
+      <p>Não foi possível carregar a Pokédex. Verifique sua conexão e tente novamente.</p>
+      <button matButton="filled" type="button" (click)="onRetry()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (isReady()) {
+    @if (isEmpty()) {
+      <p class="pokedex__empty">Nenhum Pokémon encontrado com os filtros atuais.</p>
+    } @else {
+      <p class="pokedex__count">{{ total() }} Pokémon encontrados</p>
+
+      <div class="pokedex__grid">
+        @for (pokemon of pageItems(); track pokemon.id) {
+          <app-pokemon-card [summary]="pokemon" [rarity]="rarityOf(pokemon.id)" />
+        }
+      </div>
+
+      <mat-paginator
+        [length]="total()"
+        [pageSize]="pageSize()"
+        [pageIndex]="pageIndex()"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPage($event)"
+      />
+    }
+  }
+</section>

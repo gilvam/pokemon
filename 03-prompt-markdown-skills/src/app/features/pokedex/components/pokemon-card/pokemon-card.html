@@ -1,0 +1,30 @@
+<a
+  class="pokemon-card"
+  [routerLink]="['/pokedex', summary().id]"
+  [attr.aria-label]="'Ver detalhes de ' + name()"
+>
+  <mat-card class="pokemon-card__surface" [style.background]="background()" appearance="raised">
+    <div class="pokemon-card__media">
+      <img
+        class="pokemon-card__image"
+        [ngSrc]="imageUrl()"
+        width="240"
+        height="240"
+        [alt]="name()"
+        (error)="onImageError()"
+      />
+    </div>
+    <mat-card-content class="pokemon-card__content">
+      <span class="pokemon-card__number">{{ numberLabel() }}</span>
+      <span class="pokemon-card__name">{{ name() }}</span>
+      <div class="pokemon-card__types">
+        @for (type of summary().types; track type) {
+          <app-type-chip [type]="type" />
+        }
+      </div>
+      @if (rarity(); as currentRarity) {
+        <app-rarity-badge [rarity]="currentRarity" />
+      }
+    </mat-card-content>
+  </mat-card>
+</a>

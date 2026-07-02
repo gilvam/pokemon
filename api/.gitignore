@@ -1,0 +1,10 @@
+# Mirror offline da PokeAPI — dados gerados por `npm run mirror:download` (~2,2 GB).
+# Apenas o staging temporário do download é ignorado; o código em _serve é versionado.
+/.tmp/
+
+# Junção para o node_modules do app (resolve o express dos scripts em _serve no
+# fluxo de dev `serve:pokeapi`). Criada via `New-Item -ItemType Junction`.
+/node_modules/
+/data/
+/index/
+/media/
