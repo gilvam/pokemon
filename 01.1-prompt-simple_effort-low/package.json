@@ -1,5 +1,5 @@
 {
-  "name": "01-prompt-simple-01-effort-low",
+  "name": "01.1-prompt-simple-effort-low",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -9,7 +9,7 @@
     "test": "ng test",
     "mirror:download": "node ../api/_serve/download.mjs",
     "serve:pokeapi": "node ../api/_serve/serve.mjs",
-    "serve:ssr:01-prompt-simple_01_effort-low": "node dist/01-prompt-simple_01_effort-low/server/server.mjs"
+    "serve:ssr:01.1-prompt-simple_effort-low": "node dist/01.1-prompt-simple_effort-low/server/server.mjs"
   },
   "private": true,
   "packageManager": "npm@11.12.1",
