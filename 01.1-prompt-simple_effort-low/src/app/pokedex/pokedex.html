@@ -1,0 +1,78 @@
+<main class="pokedex">
+  <h1>Pokédex</h1>
+
+  @if (city()) {
+    <p class="city-hint">📍 Detectamos que você está perto de {{ city() }}!</p>
+  }
+
+  <form class="search" (ngSubmit)="onSearchSubmit()">
+    <input
+      type="text"
+      placeholder="Digite o nome do Pokémon (ex: pikachu)"
+      [ngModel]="searchTerm()"
+      (ngModelChange)="searchTerm.set($event)"
+      name="searchTerm"
+      autocomplete="off"
+    />
+    <button type="submit">Buscar</button>
+  </form>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <div class="content">
+    <section class="list">
+      @if (loadingList()) {
+        <p>Carregando lista de Pokémon...</p>
+      } @else {
+        <ul>
+          @for (pokemon of filteredPokemon(); track pokemon.name) {
+            <li>
+              <button type="button" (click)="selectPokemon(pokemon.name)">
+                {{ pokemon.name }}
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <section class="detail">
+      @if (loadingDetail()) {
+        <p>Carregando detalhes...</p>
+      } @else if (selectedPokemon(); as pokemon) {
+        <div class="card">
+          @if (artworkUrl(pokemon); as artwork) {
+            <img [src]="artwork" [alt]="pokemon.name" />
+          }
+          <h2>{{ pokemon.name }} (#{{ pokemon.id }})</h2>
+          <p>Altura: {{ pokemon.height / 10 }} m — Peso: {{ pokemon.weight / 10 }} kg</p>
+
+          <h3>Tipos</h3>
+          <ul class="chips">
+            @for (t of pokemon.types; track t.type.name) {
+              <li>{{ t.type.name }}</li>
+            }
+          </ul>
+
+          <h3>Habilidades</h3>
+          <ul class="chips">
+            @for (a of pokemon.abilities; track a.ability.name) {
+              <li>{{ a.ability.name }}</li>
+            }
+          </ul>
+
+          <h3>Estatísticas</h3>
+          <ul class="stats">
+            @for (s of pokemon.stats; track s.stat.name) {
+              <li>{{ s.stat.name }}: {{ s.base_stat }}</li>
+            }
+          </ul>
+        </div>
+      } @else {
+        <p>Selecione ou busque um Pokémon para ver os detalhes.</p>
+      }
+    </section>
+  </div>
+</main>

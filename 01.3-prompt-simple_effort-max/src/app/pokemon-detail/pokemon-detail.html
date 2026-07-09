@@ -1,0 +1,124 @@
+<div class="pokemon-detail">
+  <a class="back-link" routerLink="/">← Voltar à Pokédex</a>
+
+  @switch (state().status) {
+    @case ('loading') {
+      <div class="status-block" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <p>Carregando...</p>
+      </div>
+    }
+    @case ('error') {
+      <div class="status-block" aria-live="polite">
+        <p>Não encontramos esse Pokémon.</p>
+        <a class="status-block__link" routerLink="/">Voltar à Pokédex</a>
+      </div>
+    }
+    @case ('success') {
+      @if (state().pokemon; as pokemon) {
+        <article class="detail-card">
+          <nav class="neighbor-nav">
+            @if (neighbors().prev; as prev) {
+              <a class="neighbor-nav__link" [routerLink]="['/pokemon', prev.name]">
+                ‹ {{ formatSlug(prev.name) }}
+              </a>
+            } @else {
+              <span></span>
+            }
+            @if (neighbors().next; as next) {
+              <a
+                class="neighbor-nav__link neighbor-nav__link--next"
+                [routerLink]="['/pokemon', next.name]"
+              >
+                {{ formatSlug(next.name) }} ›
+              </a>
+            }
+          </nav>
+
+          <header class="detail-card__header">
+            <img
+              class="detail-card__image"
+              [src]="imageSrc()"
+              [alt]="formatSlug(pokemon.name)"
+              width="200"
+              height="200"
+              (error)="onImageError()"
+            />
+            <div class="detail-card__heading">
+              <span class="detail-card__number">{{ formatPokedexNumber(pokemon.id) }}</span>
+              <h1 class="detail-card__name">{{ formatSlug(pokemon.name) }}</h1>
+              <div class="detail-card__types">
+                @for (typeSlot of pokemon.types; track typeSlot.slot) {
+                  <app-type-badge [type]="typeSlot.type.name" />
+                }
+              </div>
+            </div>
+          </header>
+
+          @if (state().flavorLoading || state().flavorText) {
+            <section class="detail-section">
+              <h2 class="detail-section__title">Descrição <span class="lang-tag">EN</span></h2>
+              @if (state().flavorLoading) {
+                <p class="detail-section__loading">Carregando descrição...</p>
+              } @else {
+                <p class="flavor-text">{{ state().flavorText }}</p>
+              }
+            </section>
+          }
+
+          <section class="detail-section">
+            <h2 class="detail-section__title">Características</h2>
+            <dl class="info-grid">
+              <div class="info-grid__item">
+                <dt>Altura</dt>
+                <dd>{{ formatHeight(pokemon.height) }}</dd>
+              </div>
+              <div class="info-grid__item">
+                <dt>Peso</dt>
+                <dd>{{ formatWeight(pokemon.weight) }}</dd>
+              </div>
+              <div class="info-grid__item">
+                <dt>Exp. base</dt>
+                <dd>{{ pokemon.base_experience ?? '—' }}</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="detail-section">
+            <h2 class="detail-section__title">Habilidades</h2>
+            <ul class="abilities">
+              @for (abilitySlot of pokemon.abilities; track abilitySlot.slot) {
+                <li>
+                  {{ formatSlug(abilitySlot.ability.name) }}
+                  @if (abilitySlot.is_hidden) {
+                    <span class="hidden-tag">oculta</span>
+                  }
+                </li>
+              }
+            </ul>
+          </section>
+
+          <section class="detail-section">
+            <h2 class="detail-section__title">Estatísticas base</h2>
+            <div class="stats">
+              @for (statSlot of pokemon.stats; track statSlot.stat.name) {
+                <app-stat-bar [stat]="statSlot.stat.name" [value]="statSlot.base_stat" />
+              }
+              <div class="stats__total">
+                <span>Total</span>
+                <span>{{ totalStats() }}</span>
+              </div>
+            </div>
+          </section>
+
+          @if (pokemon.cries.latest) {
+            <section class="detail-section">
+              <h2 class="detail-section__title">Som</h2>
+              <audio controls [src]="pokemon.cries.latest"></audio>
+            </section>
+          }
+        </article>
+      }
+    }
+  }
+</div>

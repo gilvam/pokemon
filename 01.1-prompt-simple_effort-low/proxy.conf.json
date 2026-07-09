@@ -1,0 +1,10 @@
+{
+  "/api/v2": {
+    "target": "http://localhost:4001",
+    "secure": false
+  },
+  "/media": {
+    "target": "http://localhost:4001",
+    "secure": false
+  }
+}

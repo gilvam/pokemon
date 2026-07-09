@@ -1,0 +1,40 @@
+<section class="pokemon-list">
+  <div class="pokemon-list__search">
+    <label class="visually-hidden" for="pokemon-search">Buscar Pokémon</label>
+    <input
+      id="pokemon-search"
+      type="search"
+      class="pokemon-list__input"
+      placeholder="Buscar Pokémon pelo nome ou número..."
+      autocomplete="off"
+      [value]="searchTerm()"
+      (input)="onSearchInput($event)"
+    />
+  </div>
+
+  @if (loading()) {
+    <div class="pokemon-list__status">
+      <span class="spinner" aria-hidden="true"></span>
+      <p>Carregando Pokédex...</p>
+    </div>
+  } @else {
+    @if (searchTerm()) {
+      <p class="pokemon-list__count">
+        {{ resultCount() }} {{ resultCount() === 1 ? 'Pokémon encontrado' : 'Pokémon encontrados' }}
+      </p>
+    }
+
+    @if (resultCount() === 0) {
+      <div class="pokemon-list__empty">
+        <p>Nenhum Pokémon encontrado com esse nome.</p>
+      </div>
+    } @else {
+      <div class="pokemon-list__grid">
+        @for (item of visible(); track item.id) {
+          <app-pokemon-card [pokemon]="item" />
+        }
+      </div>
+      <div #sentinel class="pokemon-list__sentinel" aria-hidden="true"></div>
+    }
+  }
+</section>
