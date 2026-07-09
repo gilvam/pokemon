@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "01-prompt-simple_01_effort-low": {
+    "01.1-prompt-simple_effort-low": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -67,15 +67,12 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
-          "options": {
-            "proxyConfig": "proxy.conf.json"
-          },
           "configurations": {
             "production": {
-              "buildTarget": "01-prompt-simple_01_effort-low:build:production"
+              "buildTarget": "01.1-prompt-simple_effort-low:build:production"
             },
             "development": {
-              "buildTarget": "01-prompt-simple_01_effort-low:build:development"
+              "buildTarget": "01.1-prompt-simple_effort-low:build:development"
             }
           },
           "defaultConfiguration": "development"

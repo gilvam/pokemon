@@ -1,0 +1,12 @@
+<a class="card" [routerLink]="['/pokemon', pokemon().name]">
+  <span class="card__id">{{ formattedId(pokemon().id) }}</span>
+  <img
+    class="card__sprite"
+    [src]="spriteUrl(pokemon().id)"
+    [alt]="pokemon().name"
+    loading="lazy"
+    width="96"
+    height="96"
+  />
+  <span class="card__name">{{ pokemon().name }}</span>
+</a>

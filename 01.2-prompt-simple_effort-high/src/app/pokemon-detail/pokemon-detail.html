@@ -1,0 +1,70 @@
+<div class="detail-page">
+  <a class="back-link" routerLink="/">&larr; Voltar</a>
+
+  @if (notFound()) {
+    <p class="detail-page__error">Pokémon não encontrado.</p>
+  } @else if (pokemon(); as pokemon) {
+    <article class="detail">
+      <header class="detail__header">
+        <img class="detail__artwork" [src]="artworkUrl(pokemon)" [alt]="pokemon.name" />
+        <div class="detail__title">
+          <span class="detail__id">{{ formattedId(pokemon.id) }}</span>
+          <h1>{{ pokemon.name }}</h1>
+          <div class="detail__types">
+            @for (t of pokemon.types; track t.type.name) {
+              <span class="type-badge" [style.background]="typeColor(t.type.name)">
+                {{ t.type.name }}
+              </span>
+            }
+          </div>
+        </div>
+      </header>
+
+      <section class="detail__metrics">
+        <div class="metric">
+          <span class="metric__label">Altura</span>
+          <span class="metric__value">{{ pokemon.height / 10 }} m</span>
+        </div>
+        <div class="metric">
+          <span class="metric__label">Peso</span>
+          <span class="metric__value">{{ pokemon.weight / 10 }} kg</span>
+        </div>
+        <div class="metric">
+          <span class="metric__label">Exp. Base</span>
+          <span class="metric__value">{{ pokemon.base_experience }}</span>
+        </div>
+      </section>
+
+      <section class="detail__section">
+        <h2>Habilidades</h2>
+        <ul class="abilities">
+          @for (a of pokemon.abilities; track a.ability.name) {
+            <li>
+              {{ a.ability.name }}
+              @if (a.is_hidden) {
+                <span class="abilities__hidden">(oculta)</span>
+              }
+            </li>
+          }
+        </ul>
+      </section>
+
+      <section class="detail__section">
+        <h2>Estatísticas</h2>
+        <div class="stats">
+          @for (s of pokemon.stats; track s.stat.name) {
+            <div class="stat-row">
+              <span class="stat-row__label">{{ statLabel(s.stat.name) }}</span>
+              <div class="stat-row__bar">
+                <div class="stat-row__fill" [style.width.%]="statPercent(s.base_stat)"></div>
+              </div>
+              <span class="stat-row__value">{{ s.base_stat }}</span>
+            </div>
+          }
+        </div>
+      </section>
+    </article>
+  } @else {
+    <p class="detail-page__loading">Carregando...</p>
+  }
+</div>

@@ -1,0 +1,163 @@
+.detail-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: var(--accent, #cc2222);
+  text-decoration: none;
+  font-weight: 600;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.detail-page__loading,
+.detail-page__error {
+  text-align: center;
+  color: #777;
+  margin-top: 3rem;
+}
+
+.detail {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.detail__header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.detail__artwork {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+}
+
+.detail__title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.detail__id {
+  color: #999;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.detail__title h1 {
+  margin: 0;
+  text-transform: capitalize;
+  font-size: 2rem;
+}
+
+.detail__types {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.type-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.detail__metrics {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  padding: 1rem 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metric__label {
+  font-size: 0.75rem;
+  color: #999;
+  text-transform: uppercase;
+}
+
+.metric__value {
+  font-weight: 600;
+}
+
+.detail__section {
+  margin-top: 1.5rem;
+
+  h2 {
+    font-size: 1.1rem;
+    margin: 0 0 0.75rem;
+  }
+}
+
+.abilities {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-transform: capitalize;
+}
+
+.abilities__hidden {
+  color: #999;
+  font-size: 0.8rem;
+  text-transform: none;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 40px;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stat-row__label {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.stat-row__bar {
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.stat-row__fill {
+  height: 100%;
+  background: var(--accent, #cc2222);
+  border-radius: 4px;
+}
+
+.stat-row__value {
+  text-align: right;
+  font-weight: 600;
+  font-size: 0.85rem;
+}

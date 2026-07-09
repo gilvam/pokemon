@@ -8,5 +8,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('01-prompt-simple_01_effort-low');
+  protected readonly title = signal('01.1-prompt-simple_effort-low');
 }

@@ -1,0 +1,34 @@
+<div class="list-page">
+  <header class="list-page__header">
+    <h1>Pokédex</h1>
+    <input
+      class="search"
+      type="search"
+      placeholder="Buscar por nome ou número..."
+      [ngModel]="search()"
+      (ngModelChange)="search.set($event); onSearchChange()"
+      aria-label="Buscar Pokémon"
+    />
+    <p class="list-page__count">
+      {{ filtered().length }} de {{ totalCount() }} Pokémon
+    </p>
+  </header>
+
+  @if (totalCount() === 0) {
+    <p class="list-page__loading">Carregando Pokémon...</p>
+  } @else if (filtered().length === 0) {
+    <p class="list-page__empty">Nenhum Pokémon encontrado para "{{ search() }}".</p>
+  } @else {
+    <div class="grid">
+      @for (pokemon of visible(); track pokemon.id) {
+        <app-pokemon-card [pokemon]="pokemon" />
+      }
+    </div>
+
+    @if (hasMore()) {
+      <button class="load-more" type="button" (click)="loadMore()">
+        Carregar mais
+      </button>
+    }
+  }
+</div>
