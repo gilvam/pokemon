@@ -7,6 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "mirror:download": "node ../api/_serve/download.mjs",
+    "serve:pokeapi": "node ../api/_serve/serve.mjs",
     "serve:ssr:02-prompt-markdown": "node dist/02-prompt-markdown/server/server.mjs"
   },
   "private": true,

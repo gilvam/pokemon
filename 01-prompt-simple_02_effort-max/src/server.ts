@@ -6,6 +6,7 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
+import { createPokeapiMirrorRouter } from '../../api/_serve/mirror-router.mjs';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -13,16 +14,11 @@ const app = express();
 const angularApp = new AngularNodeAppEngine();
 
 /**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
+ * Mirror offline da PokeAPI (/api/v2 e /media) — ver api/README.md.
+ * Serve os mesmos caminhos usados em desenvolvimento via proxy.conf.json,
+ * permitindo que um único processo sirva o app Angular + a API + a mídia.
  */
+app.use(createPokeapiMirrorRouter());
 
 /**
  * Serve static files from /browser
@@ -41,9 +37,7 @@ app.use(
 app.use((req, res, next) => {
   angularApp
     .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
+    .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
     .catch(next);
 });
 
