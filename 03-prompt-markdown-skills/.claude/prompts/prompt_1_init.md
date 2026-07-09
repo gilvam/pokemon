@@ -12,7 +12,7 @@
 
 <template>
     <task>
-      [Nome curto da funcionalidade]``
+      [Nome curto da funcionalidade]
     </task>
     
     <goal>
