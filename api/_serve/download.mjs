@@ -1,4 +1,4 @@
-// Baixa uma cópia local idêntica da PokeAPI (JSON + sprites) a partir dos
+  // Baixa uma cópia local idêntica da PokeAPI (JSON + sprites) a partir dos
 // repositórios oficiais e gera índices auxiliares para o servidor offline.
 //
 // Uso (numa máquina COM internet):
@@ -10,14 +10,14 @@
 //   api/index/<endpoint>.json                     (lista completa p/ paginação)
 //   api/index/<endpoint>.names.json               (mapa nome -> id)
 
-import { spawnSync } from 'node:child_process';
-import { createWriteStream } from 'node:fs';
-import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
-import { Readable } from 'node:stream';
-import { pipeline } from 'node:stream/promises';
+  import { spawnSync } from 'node:child_process';
+  import { createWriteStream } from 'node:fs';
+  import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
+  import { join, resolve } from 'node:path';
+  import { Readable } from 'node:stream';
+  import { pipeline } from 'node:stream/promises';
 
-const MIRROR_DIR = resolve(process.env.POKEAPI_MIRROR_DIR ?? '../api');
+  const MIRROR_DIR = resolve(process.env.POKEAPI_MIRROR_DIR ?? '../api');
 const TMP_DIR = join(MIRROR_DIR, '.tmp');
 const DATA_DIR = join(MIRROR_DIR, 'data', 'api', 'v2');
 const MEDIA_DIR = join(MIRROR_DIR, 'media');
