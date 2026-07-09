@@ -1,4 +1,23 @@
-# 01PromptSimple01EffortHigh
+# Pokédex
+
+Pokédex em Angular que lista todos os Pokémon e permite buscar um pelo nome (ou número)
+para ver seus detalhes: sprite/artwork, tipos, altura, peso, habilidades, estatísticas
+base e grito. Os dados vêm da API local (mirror offline da PokeAPI) — veja
+[`../api/README.md`](../api/README.md).
+
+## Rodando localmente
+
+Este app **não** funciona sozinho: ele consome a API local em `/api/v2` e `/media`,
+então é preciso subir os dois processos.
+
+1. Em um terminal, suba a API: `npm run serve:pokeapi` (porta 4001)
+2. Em outro terminal, suba o app: `npm start` (porta 4200, com proxy configurado em
+   `proxy.conf.json` para `/api/v2` e `/media`)
+3. Caso não tenha nenhum retorno da API, baixe o mirror uma vez (numa máquina com
+   internet): `npm run mirror:download`, finalize os processos 1 e 2 e os reinicie.
+
+Alternativamente, `npm run build && npm run serve:ssr:01-prompt-simple_01_effort-high`
+sobe um único processo (porta 4000) servindo o app **e** a API mirror juntos.
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.0.
 
