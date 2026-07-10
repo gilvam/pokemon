@@ -1,0 +1,1 @@
+C:/Users/gilva/IdeaProjects/pokemon/04.2-prompt-markdown-skills/AGENTS.md

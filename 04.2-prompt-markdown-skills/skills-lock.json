@@ -43,12 +43,6 @@
       "skillPath": "skills/context7/SKILL.md",
       "computedHash": "b6919c81b67199c271769146895503fcfe62efd289bf2bb16691e801c37bf8ff"
     },
-    "skill-best-practices": {
-      "source": "gilvam/skills",
-      "sourceType": "github",
-      "skillPath": "skills/skill-best-practices/SKILL.md",
-      "computedHash": "8ec13fa8b863613950c311b17920e66397cc6a8bc56a7c1ad978f8c920757444"
-    },
     "typescript-patterns": {
       "source": "gilvam/skills",
       "sourceType": "github",
