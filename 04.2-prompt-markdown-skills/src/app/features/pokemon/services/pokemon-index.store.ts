@@ -8,11 +8,7 @@ import { PokemonType } from '../models/pokemon-type.enum';
 import { PokemonIndexStatus } from '../models/pokemon-index-status.enum';
 import { ResourceId } from '../models/resource-id.model';
 import { TypePalette } from '../models/type-palette.model';
-
-interface TypeSlot {
-  slot: number;
-  type: PokemonType;
-}
+import { TypeSlot } from '../models/type-slot.model';
 
 /**
  * Bootstraps the full Pokémon index once per session: one request for the name/id
@@ -77,7 +73,7 @@ export class PokemonIndexStore {
           return;
         }
         const list = slotsById.get(id) ?? [];
-        list.push({ slot: entry.slot, type });
+        list.push(new TypeSlot(entry.slot, type));
         slotsById.set(id, list);
       });
     });

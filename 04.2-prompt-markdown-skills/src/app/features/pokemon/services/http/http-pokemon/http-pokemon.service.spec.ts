@@ -63,7 +63,7 @@ describe('HttpPokemonService', () => {
     let result: PokemonDto | undefined;
     service.getPokemon(25).subscribe((value) => (result = value));
 
-    httpMock.expectOne(service.pokemonUrl(25)).flush(getPokemonMock);
+    httpMock.expectOne(service.buildPokemonUrl(25)).flush(getPokemonMock);
 
     expect(result).toBeInstanceOf(PokemonDto);
     expect(result?.height).toBe(4);
@@ -76,7 +76,7 @@ describe('HttpPokemonService', () => {
     let result: PokemonSpeciesDto | undefined;
     service.getSpecies(25).subscribe((value) => (result = value));
 
-    httpMock.expectOne(service.speciesUrl(25)).flush(getSpeciesMock);
+    httpMock.expectOne(service.buildSpeciesUrl(25)).flush(getSpeciesMock);
 
     expect(result).toBeInstanceOf(PokemonSpeciesDto);
     expect(result?.genera.at(0)?.genus).toBe('Mouse Pokémon');
@@ -88,7 +88,7 @@ describe('HttpPokemonService', () => {
     let result: EvolutionChainDto | undefined;
     service.getEvolutionChain(10).subscribe((value) => (result = value));
 
-    httpMock.expectOne(service.evolutionChainUrl(10)).flush(getEvolutionChainMock);
+    httpMock.expectOne(service.buildEvolutionChainUrl(10)).flush(getEvolutionChainMock);
 
     expect(result?.chain.species.name).toBe('pichu');
     expect(result?.chain.evolvesTo.at(0)?.species.name).toBe('pikachu');
@@ -105,7 +105,7 @@ describe('HttpPokemonService', () => {
     });
 
     httpMock
-      .expectOne(service.pokemonUrl(999999))
+      .expectOne(service.buildPokemonUrl(999999))
       .flush(mock404NotFound, { status: 404, statusText: 'Not Found' });
 
     expect(captured?.status).toBe(404);

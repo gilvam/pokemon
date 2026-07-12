@@ -19,7 +19,7 @@ const DEBOUNCE_MS = 200;
 export class PokemonList implements OnInit {
   private readonly store = inject(PokemonIndexStore);
 
-  protected readonly Status = PokemonIndexStatus;
+  protected readonly pokemonIndexStatus = PokemonIndexStatus;
   protected readonly status = this.store.status;
 
   protected readonly searchTerm = signal('');

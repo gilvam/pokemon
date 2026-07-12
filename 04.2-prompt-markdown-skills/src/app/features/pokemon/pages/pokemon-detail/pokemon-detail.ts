@@ -9,15 +9,11 @@ import { EvolutionLinkDto } from '../../services/http/http-pokemon/models/evolut
 import { PokemonType } from '../../models/pokemon-type.enum';
 import { TypePalette } from '../../models/type-palette.model';
 import { SpriteUrl } from '../../models/sprite-url.model';
+import { SpriteView } from '../../models/sprite-view.model';
 import { StatLabel } from '../../models/stat-label.model';
 import { EvolutionStep } from '../../models/evolution-step.model';
 import { ResourceId } from '../../models/resource-id.model';
 import { StatBar } from '../../components/stat-bar/stat-bar';
-
-interface SpriteView {
-  label: string;
-  url: string;
-}
 
 /** Pokémon detail page: chains 3 httpResource() calls (pokemon → species → evolution). */
 @Component({
@@ -34,85 +30,98 @@ export class PokemonDetail {
 
   private readonly pokemonId = computed(() => Number(this.id()));
 
-  protected readonly pokemon = httpResource(() => this.api.pokemonUrl(this.pokemonId()), {
+  protected readonly pokemon = httpResource(() => this.api.buildPokemonUrl(this.pokemonId()), {
     parse: (raw) => PokemonDto.create(raw as Partial<PokemonDto>),
   });
 
-  private readonly speciesId = computed(() =>
-    this.pokemon.hasValue() ? ResourceId.fromUrl(this.pokemon.value().species.url) : 0,
+  /** Single guarded read of the resolved Pokémon, reused by every downstream computed below. */
+  private readonly pokemonValue = computed<PokemonDto | undefined>(() =>
+    this.pokemon.hasValue() ? this.pokemon.value() : undefined,
   );
 
+  private readonly speciesId = computed(() => {
+    const pokemon = this.pokemonValue();
+    return pokemon ? ResourceId.fromUrl(pokemon.species.url) : 0;
+  });
+
   protected readonly species = httpResource(
-    () => (this.speciesId() > 0 ? this.api.speciesUrl(this.speciesId()) : undefined),
+    () => (this.speciesId() > 0 ? this.api.buildSpeciesUrl(this.speciesId()) : undefined),
     { parse: (raw) => PokemonSpeciesDto.create(raw as Partial<PokemonSpeciesDto>) },
   );
 
-  private readonly evolutionChainId = computed(() =>
-    this.species.hasValue() ? ResourceId.fromUrl(this.species.value().evolutionChain.url) : 0,
+  private readonly speciesValue = computed<PokemonSpeciesDto | undefined>(() =>
+    this.species.hasValue() ? this.species.value() : undefined,
   );
 
+  private readonly evolutionChainId = computed(() => {
+    const species = this.speciesValue();
+    return species ? ResourceId.fromUrl(species.evolutionChain.url) : 0;
+  });
+
   protected readonly evolution = httpResource(
-    () => (this.evolutionChainId() > 0 ? this.api.evolutionChainUrl(this.evolutionChainId()) : undefined),
+    () =>
+      this.evolutionChainId() > 0 ? this.api.buildEvolutionChainUrl(this.evolutionChainId()) : undefined,
     { parse: (raw) => EvolutionChainDto.create(raw as Partial<EvolutionChainDto>) },
   );
 
-  protected readonly types = computed<PokemonType[]>(() =>
-    this.pokemon.hasValue()
-      ? [...this.pokemon.value().types]
-          .sort((left, right) => left.slot - right.slot)
-          .map((slot) => slot.type.name as PokemonType)
-      : [],
-  );
+  protected readonly types = computed<PokemonType[]>(() => {
+    const pokemon = this.pokemonValue();
+    if (!pokemon) {
+      return [];
+    }
+    return [...pokemon.types]
+      .sort((left, right) => left.slot - right.slot)
+      .map((slot) => slot.type.name as PokemonType);
+  });
 
   protected readonly background = computed(() => TypePalette.cardBackground(this.types()));
 
-  protected readonly numberLabel = computed(() =>
-    this.pokemon.hasValue() ? `#${String(this.pokemon.value().id).padStart(4, '0')}` : '',
-  );
+  protected readonly numberLabel = computed(() => {
+    const pokemon = this.pokemonValue();
+    return pokemon ? `#${String(pokemon.id).padStart(4, '0')}` : '';
+  });
 
-  protected readonly artworkUrl = computed(() =>
-    this.pokemon.hasValue() ? SpriteUrl.artwork(this.pokemon.value().id) : '',
-  );
+  protected readonly artworkUrl = computed(() => {
+    const pokemon = this.pokemonValue();
+    return pokemon ? SpriteUrl.artwork(pokemon.id) : '';
+  });
 
   protected readonly genus = computed(() => {
-    if (!this.species.hasValue()) {
-      return '';
-    }
-    return this.species.value().genera.find((entry) => entry.language.name === 'en')?.genus ?? '';
+    const species = this.speciesValue();
+    return species?.genera.find((entry) => entry.language.name === 'en')?.genus ?? '';
   });
 
   protected readonly flavorText = computed(() => {
-    if (!this.species.hasValue()) {
-      return '';
-    }
-    const entry = this.species.value().flavorTextEntries.find((item) => item.language.name === 'en');
+    const species = this.speciesValue();
+    const entry = species?.flavorTextEntries.find((item) => item.language.name === 'en');
     return entry ? entry.flavorText.replace(/[\n\f\r]+/g, ' ').trim() : '';
   });
 
-  protected readonly statTotal = computed(() =>
-    this.pokemon.hasValue()
-      ? this.pokemon.value().stats.reduce((sum, stat) => sum + stat.baseStat, 0)
-      : 0,
-  );
+  protected readonly statTotal = computed(() => {
+    const pokemon = this.pokemonValue();
+    return pokemon ? pokemon.stats.reduce((sum, stat) => sum + stat.baseStat, 0) : 0;
+  });
 
-  protected readonly heightMeters = computed(() =>
-    this.pokemon.hasValue() ? `${(this.pokemon.value().height / 10).toFixed(1)} m` : '',
-  );
+  protected readonly heightMeters = computed(() => {
+    const pokemon = this.pokemonValue();
+    return pokemon ? `${(pokemon.height / 10).toFixed(1)} m` : '';
+  });
 
-  protected readonly weightKg = computed(() =>
-    this.pokemon.hasValue() ? `${(this.pokemon.value().weight / 10).toFixed(1)} kg` : '',
-  );
+  protected readonly weightKg = computed(() => {
+    const pokemon = this.pokemonValue();
+    return pokemon ? `${(pokemon.weight / 10).toFixed(1)} kg` : '';
+  });
 
   protected readonly sprites = computed<SpriteView[]>(() => {
-    if (!this.pokemon.hasValue()) {
+    const pokemon = this.pokemonValue();
+    if (!pokemon) {
       return [];
     }
-    const sprites = this.pokemon.value().sprites;
     return [
-      { label: 'Frente', url: sprites.frontDefault },
-      { label: 'Costas', url: sprites.backDefault },
-      { label: 'Frente shiny', url: sprites.frontShiny },
-      { label: 'Costas shiny', url: sprites.backShiny },
+      new SpriteView('Frente', pokemon.sprites.frontDefault),
+      new SpriteView('Costas', pokemon.sprites.backDefault),
+      new SpriteView('Frente shiny', pokemon.sprites.frontShiny),
+      new SpriteView('Costas shiny', pokemon.sprites.backShiny),
     ].filter((sprite) => sprite.url.length > 0);
   });
 

@@ -33,32 +33,32 @@ export class HttpPokemonService {
 
   getPokemon(id: number): Observable<PokemonDto> {
     return this.http
-      .get<PokemonDto>(this.pokemonUrl(id))
+      .get<PokemonDto>(this.buildPokemonUrl(id))
       .pipe(map((response) => PokemonDto.create(response)));
   }
 
   getSpecies(id: number): Observable<PokemonSpeciesDto> {
     return this.http
-      .get<PokemonSpeciesDto>(this.speciesUrl(id))
+      .get<PokemonSpeciesDto>(this.buildSpeciesUrl(id))
       .pipe(map((response) => PokemonSpeciesDto.create(response)));
   }
 
   getEvolutionChain(id: number): Observable<EvolutionChainDto> {
     return this.http
-      .get<EvolutionChainDto>(this.evolutionChainUrl(id))
+      .get<EvolutionChainDto>(this.buildEvolutionChainUrl(id))
       .pipe(map((response) => EvolutionChainDto.create(response)));
   }
 
   /** URL builders reused by `httpResource()` in the detail page (needs a URL, not an Observable). */
-  pokemonUrl(id: number): string {
+  buildPokemonUrl(id: number): string {
     return `${this.baseUrl}/pokemon/${id}`;
   }
 
-  speciesUrl(id: number): string {
+  buildSpeciesUrl(id: number): string {
     return `${this.baseUrl}/pokemon-species/${id}`;
   }
 
-  evolutionChainUrl(id: number): string {
+  buildEvolutionChainUrl(id: number): string {
     return `${this.baseUrl}/evolution-chain/${id}`;
   }
 }

@@ -1,10 +1,10 @@
 <h1>Pokédex</h1>
 
 @switch (status()) {
-  @case (Status.LOADING) {
+  @case (pokemonIndexStatus.LOADING) {
     <p role="status">Carregando Pokédex…</p>
   }
-  @case (Status.ERROR) {
+  @case (pokemonIndexStatus.ERROR) {
     <div role="alert" class="error">
       <p>Não foi possível carregar a Pokédex.</p>
       <button type="button" (click)="retry()">Tentar novamente</button>
