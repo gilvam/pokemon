@@ -1,0 +1,33 @@
+:host {
+  display: grid;
+  grid-template-columns: 7.5rem 2.5rem 1fr;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stat-bar__label {
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.stat-bar__value {
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-bar__track {
+  position: relative;
+  height: 0.6rem;
+  border-radius: 999px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.stat-bar__fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  border-radius: 999px;
+  background: #1f2937;
+}

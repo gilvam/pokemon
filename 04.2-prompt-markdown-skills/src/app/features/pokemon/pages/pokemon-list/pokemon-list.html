@@ -1,0 +1,32 @@
+<h1>Pokédex</h1>
+
+@switch (status()) {
+  @case (Status.LOADING) {
+    <p role="status">Carregando Pokédex…</p>
+  }
+  @case (Status.ERROR) {
+    <div role="alert" class="error">
+      <p>Não foi possível carregar a Pokédex.</p>
+      <button type="button" (click)="retry()">Tentar novamente</button>
+    </div>
+  }
+  @default {
+    <app-pokemon-search [(term)]="searchTerm" />
+
+    @if (isEmpty()) {
+      <p>Nenhum Pokémon encontrado para "{{ searchTerm() }}"</p>
+    } @else {
+      <div class="grid">
+        @for (item of pageItems(); track item.id) {
+          <app-pokemon-card [summary]="item" />
+        }
+      </div>
+
+      <app-pagination
+        [page]="page()"
+        [totalPages]="totalPages()"
+        (pageChange)="onPageChange($event)"
+      />
+    }
+  }
+}

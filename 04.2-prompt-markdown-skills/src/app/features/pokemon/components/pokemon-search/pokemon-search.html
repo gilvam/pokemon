@@ -1,0 +1,10 @@
+<label class="search__label" for="pokemon-search-input">Buscar Pokémon pelo nome</label>
+<input
+  id="pokemon-search-input"
+  class="search__input"
+  type="search"
+  [value]="term()"
+  (input)="onInput($event)"
+  placeholder="Buscar por nome..."
+  autocomplete="off"
+/>

@@ -1,5 +1,5 @@
 {
-  "name": "02-prompt-markdown",
+  "name": "04.2-prompt-markdown-skills",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -9,7 +9,7 @@
     "test": "ng test",
     "mirror:download": "node ../api/_serve/download.mjs",
     "serve:pokeapi": "node ../api/_serve/serve.mjs",
-    "serve:ssr:02-prompt-markdown": "node dist/02-prompt-markdown/server/server.mjs"
+    "serve:ssr:pokemon": "node dist/pokemon/server/server.mjs"
   },
   "private": true,
   "packageManager": "npm@11.12.1",

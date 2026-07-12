@@ -1,0 +1,131 @@
+@if (pokemon.isLoading()) {
+  <div class="detail__loading" role="status" aria-live="polite">
+    <span class="spinner" aria-hidden="true"></span>
+    <span>Carregando Pokémon…</span>
+  </div>
+}
+
+@if (pokemon.error()) {
+  <div class="detail__error" role="alert">
+    <p>Não foi possível encontrar esse Pokémon.</p>
+    <a routerLink="/pokemon">Voltar para a lista</a>
+  </div>
+}
+
+@if (pokemon.hasValue()) {
+  <article class="detail">
+    <a class="detail__back" routerLink="/pokemon">← Voltar</a>
+
+    <header class="detail__header" [style.background]="background()">
+      <img
+        class="detail__artwork"
+        [src]="artworkUrl()"
+        width="320"
+        height="320"
+        [alt]="'Ilustração de ' + pokemon.value().name"
+      />
+      <div class="detail__heading">
+        <span class="detail__number">{{ numberLabel() }}</span>
+        <h1 class="detail__name">{{ pokemon.value().name }}</h1>
+        @if (genus()) {
+          <p class="detail__genus">{{ genus() }}</p>
+        }
+        <div class="detail__types">
+          @for (type of types(); track type) {
+            <span class="detail__type-chip">{{ type }}</span>
+          }
+        </div>
+      </div>
+    </header>
+
+    @if (flavorText()) {
+      <p class="detail__flavor">{{ flavorText() }}</p>
+    }
+
+    <div class="detail__grid">
+      <section class="detail__card">
+        <h2 class="detail__section-title">Estatísticas base</h2>
+        <div class="detail__stats">
+          @for (stat of pokemon.value().stats; track stat.stat.name) {
+            <app-stat-bar [label]="statLabel(stat.stat.name)" [value]="stat.baseStat" />
+          }
+        </div>
+        <p class="detail__total">
+          Total: <strong>{{ statTotal() }}</strong>
+        </p>
+      </section>
+
+      <section class="detail__card">
+        <h2 class="detail__section-title">Características</h2>
+        <dl class="detail__attrs">
+          <dt>Altura</dt>
+          <dd>{{ heightMeters() }}</dd>
+          <dt>Peso</dt>
+          <dd>{{ weightKg() }}</dd>
+        </dl>
+      </section>
+
+      <section class="detail__card">
+        <h2 class="detail__section-title">Habilidades</h2>
+        <ul class="detail__abilities">
+          @for (ability of pokemon.value().abilities; track ability.ability.name) {
+            <li>
+              <span>{{ humanize(ability.ability.name) }}</span>
+              @if (ability.isHidden) {
+                <span class="detail__ability-hidden">oculta</span>
+              }
+            </li>
+          }
+        </ul>
+      </section>
+    </div>
+
+    @if (evolution.isLoading()) {
+      <p class="detail__section-loading">Carregando linha evolutiva…</p>
+    }
+
+    @if (evolutionSteps().length > 1) {
+      <section class="detail__evolution" aria-labelledby="evolution-title">
+        <h2 class="detail__section-title" id="evolution-title">Linha evolutiva</h2>
+        <ol class="detail__evolution-list">
+          @for (step of evolutionSteps(); track step.id; let last = $last) {
+            <li class="detail__evolution-item">
+              <a class="detail__evolution-link" [routerLink]="['/pokemon', step.id]">
+                <img [src]="stepArtwork(step.id)" width="96" height="96" [alt]="step.name" />
+                <span>{{ step.name }}</span>
+              </a>
+              @if (!last) {
+                <span aria-hidden="true">→</span>
+              }
+            </li>
+          }
+        </ol>
+      </section>
+    }
+
+    @if (sprites().length > 0) {
+      <section class="detail__sprites" aria-labelledby="sprites-title">
+        <h2 class="detail__section-title" id="sprites-title">Sprites</h2>
+        <div class="detail__sprite-grid">
+          @for (sprite of sprites(); track sprite.label) {
+            <figure class="detail__sprite">
+              <img [src]="sprite.url" width="96" height="96" [alt]="pokemon.value().name + ' — ' + sprite.label" />
+              <figcaption>{{ sprite.label }}</figcaption>
+            </figure>
+          }
+        </div>
+      </section>
+    }
+
+    @if (pokemon.value().cries.latest) {
+      <section class="detail__cry" aria-labelledby="cry-title">
+        <h2 class="detail__section-title" id="cry-title">Som (cry)</h2>
+        <audio
+          controls
+          [src]="pokemon.value().cries.latest"
+          [attr.aria-label]="'Som de ' + pokemon.value().name"
+        ></audio>
+      </section>
+    }
+  </article>
+}

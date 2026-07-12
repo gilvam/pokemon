@@ -1,0 +1,22 @@
+{
+  "id": 25,
+  "name": "pikachu",
+  "genera": [
+    {
+      "genus": "Mouse Pokémon",
+      "language": { "name": "en", "url": "/api/v2/language/9/" }
+    },
+    {
+      "genus": "ねずみポケモン",
+      "language": { "name": "ja-Hrkt", "url": "/api/v2/language/1/" }
+    }
+  ],
+  "flavor_text_entries": [
+    {
+      "flavor_text": "When several of these POKéMON gather, their electricity could build and cause lightning storms.",
+      "language": { "name": "en", "url": "/api/v2/language/9/" },
+      "version": { "name": "red", "url": "/api/v2/version/1/" }
+    }
+  ],
+  "evolution_chain": { "url": "/api/v2/evolution-chain/10/" }
+}

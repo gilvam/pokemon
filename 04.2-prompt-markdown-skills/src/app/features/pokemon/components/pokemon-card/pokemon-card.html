@@ -1,0 +1,13 @@
+<a class="card" [routerLink]="['/pokemon', summary().id]" [style.background]="background()">
+  <img
+    class="card__image"
+    [src]="imageUrl()"
+    [alt]="'Ilustração de ' + name()"
+    loading="lazy"
+    width="120"
+    height="120"
+    (error)="onImageError()"
+  />
+  <span class="card__number">{{ numberLabel() }}</span>
+  <span class="card__name">{{ name() }}</span>
+</a>

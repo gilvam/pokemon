@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "02-prompt-markdown": {
+    "pokemon": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -67,12 +67,15 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": {
-              "buildTarget": "02-prompt-markdown:build:production"
+              "buildTarget": "pokemon:build:production"
             },
             "development": {
-              "buildTarget": "02-prompt-markdown:build:development"
+              "buildTarget": "pokemon:build:development"
             }
           },
           "defaultConfiguration": "development"

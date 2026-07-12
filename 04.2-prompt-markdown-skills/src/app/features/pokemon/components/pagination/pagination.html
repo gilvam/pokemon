@@ -1,0 +1,5 @@
+<nav class="pagination" aria-label="Paginação da lista de Pokémon">
+  <button type="button" (click)="goToPrevious()" [disabled]="!hasPrevious()">Anterior</button>
+  <span aria-live="polite">{{ label() }}</span>
+  <button type="button" (click)="goToNext()" [disabled]="!hasNext()">Próxima</button>
+</nav>
